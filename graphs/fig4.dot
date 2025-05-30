@@ -1,0 +1,233 @@
+digraph Figure4_Multiple_States {
+    rankdir=LR;
+    
+    // Graph styling
+    graph [bgcolor=white, fontname="Arial", fontsize=12];
+    node [fontname="Arial", fontsize=9];
+    edge [fontname="Arial", fontsize=8];
+    
+    // Interactive Input box with multiple Interactive Input States
+    subgraph cluster_input {
+        style=filled;
+        fillcolor="#E8F4FD";
+        color="#2196F3";
+        label="Interactive Input\n(Multiple Input States)";
+        labelloc=bottom;
+        
+        ii_state_1 [
+            shape=circle,
+            style=filled,
+            fillcolor="#1976D2",
+            fontcolor=white,
+            label="A",
+            width=0.6,
+            height=0.6
+        ];
+        
+        ii_state_2 [
+            shape=circle,
+            style=filled,
+            fillcolor="#1976D2",
+            fontcolor=white,
+            label="B",
+            width=0.6,
+            height=0.6
+        ];
+        
+        ii_state_3 [
+            shape=circle,
+            style=filled,
+            fillcolor="#1976D2",
+            fontcolor=white,
+            label="C",
+            width=0.6,
+            height=0.6
+        ];
+    }
+    
+    // Input-Side Dimensional Transformation
+    dt_input [
+        shape=box,
+        style=filled,
+        fillcolor="#EEEEEE",
+        label="Input-Side\nDimensional\nTransformation\n(3×2 Matrix)",
+        width=1.2,
+        height=1.2
+    ];
+    
+    // System Core box with System Input States, System Dynamics, and System Output States
+    subgraph cluster_system {
+        style=filled;
+        fillcolor="#F3E5F5";
+        color="#9C27B0";
+        label="System Core\n(Multiple Input/Output States)";
+        labelloc=bottom;
+        
+        si_state_1 [
+            shape=circle,
+            style=filled,
+            fillcolor="#7B1FA2",
+            fontcolor=white,
+            label="1",
+            width=0.6,
+            height=0.6
+        ];
+        
+        si_state_2 [
+            shape=circle,
+            style=filled,
+            fillcolor="#7B1FA2",
+            fontcolor=white,
+            label="2",
+            width=0.6,
+            height=0.6
+        ];
+        
+        // Abstract System Dynamics representation
+        system_dynamics [
+            shape=diamond,
+            style=filled,
+            fillcolor="#AB47BC",
+            fontcolor=white,
+            label="System\nDynamics",
+            width=1.2,
+            height=0.8
+        ];
+        
+        so_state_1 [
+            shape=circle,
+            style=filled,
+            fillcolor="#7B1FA2",
+            fontcolor=white,
+            label="α",
+            width=0.6,
+            height=0.6
+        ];
+        
+        so_state_2 [
+            shape=circle,
+            style=filled,
+            fillcolor="#7B1FA2",
+            fontcolor=white,
+            label="β",
+            width=0.6,
+            height=0.6
+        ];
+        
+        so_state_3 [
+            shape=circle,
+            style=filled,
+            fillcolor="#7B1FA2",
+            fontcolor=white,
+            label="γ",
+            width=0.6,
+            height=0.6
+        ];
+        
+        so_state_4 [
+            shape=circle,
+            style=filled,
+            fillcolor="#7B1FA2",
+            fontcolor=white,
+            label="δ",
+            width=0.6,
+            height=0.6
+        ];
+        
+        // System flow
+        si_state_1 -> system_dynamics [color="#9C27B0"];
+        si_state_2 -> system_dynamics [color="#9C27B0"];
+        system_dynamics -> so_state_1 [color="#9C27B0"];
+        system_dynamics -> so_state_2 [color="#9C27B0"];
+        system_dynamics -> so_state_3 [color="#9C27B0"];
+        system_dynamics -> so_state_4 [color="#9C27B0"];
+    }
+    
+    // Output-Side Dimensional Transformation
+    dt_output [
+        shape=box,
+        style=filled,
+        fillcolor="#EEEEEE",
+        label="Output-Side\nDimensional\nTransformation\n(4×5 Matrix)",
+        width=1.2,
+        height=1.2
+    ];
+    
+    // Visual Output box with multiple Visual Output States
+    subgraph cluster_output {
+        style=filled;
+        fillcolor="#FFF3E0";
+        color="#FF9800";
+        label="Visual Output\n(Multiple Output States)";
+        labelloc=bottom;
+        
+        vo_state_1 [
+            shape=circle,
+            style=filled,
+            fillcolor="#F57C00",
+            fontcolor=white,
+            label="X",
+            width=0.6,
+            height=0.6
+        ];
+        
+        vo_state_2 [
+            shape=circle,
+            style=filled,
+            fillcolor="#F57C00",
+            fontcolor=white,
+            label="Y",
+            width=0.6,
+            height=0.6
+        ];
+        
+        vo_state_3 [
+            shape=circle,
+            style=filled,
+            fillcolor="#F57C00",
+            fontcolor=white,
+            label="Z",
+            width=0.6,
+            height=0.6
+        ];
+        
+        vo_state_4 [
+            shape=circle,
+            style=filled,
+            fillcolor="#F57C00",
+            fontcolor=white,
+            label="W",
+            width=0.6,
+            height=0.6
+        ];
+        
+        vo_state_5 [
+            shape=circle,
+            style=filled,
+            fillcolor="#F57C00",
+            fontcolor=white,
+            label="V",
+            width=0.6,
+            height=0.6
+        ];
+    }
+    
+    // Connections
+    ii_state_1 -> dt_input [color="#666666", style=bold, arrowhead=none];
+    ii_state_2 -> dt_input [color="#666666", style=bold, arrowhead=none];
+    ii_state_3 -> dt_input [color="#666666", style=bold, arrowhead=none];
+    
+    dt_input -> si_state_1 [color="#666666", style=bold];
+    dt_input -> si_state_2 [color="#666666", style=bold];
+    
+    so_state_1 -> dt_output [color="#666666", style=bold, arrowhead=none];
+    so_state_2 -> dt_output [color="#666666", style=bold, arrowhead=none];
+    so_state_3 -> dt_output [color="#666666", style=bold, arrowhead=none];
+    so_state_4 -> dt_output [color="#666666", style=bold, arrowhead=none];
+    
+    dt_output -> vo_state_1 [color="#666666", style=bold];
+    dt_output -> vo_state_2 [color="#666666", style=bold];
+    dt_output -> vo_state_3 [color="#666666", style=bold];
+    dt_output -> vo_state_4 [color="#666666", style=bold];
+    dt_output -> vo_state_5 [color="#666666", style=bold];
+} 

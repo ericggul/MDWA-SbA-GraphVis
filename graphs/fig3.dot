@@ -43,15 +43,35 @@ digraph Figure2_State_Based_Approach {
             height=1.0
         ];
         
-        // Abstract System Dynamics representation
-        system_dynamics [
-            shape=diamond,
+        // System Dynamics representation
+        dynamics_process_1 [
+            shape=ellipse,
             style=filled,
             fillcolor="#AB47BC",
             fontcolor=white,
-            label="System\nDynamics",
-            width=1.5,
-            height=1.0
+            label="Process 1",
+            width=0.8,
+            height=0.6
+        ];
+        
+        dynamics_process_2 [
+            shape=ellipse,
+            style=filled,
+            fillcolor="#AB47BC",
+            fontcolor=white,
+            label="Process 2",
+            width=0.8,
+            height=0.6
+        ];
+        
+        dynamics_process_3 [
+            shape=ellipse,
+            style=filled,
+            fillcolor="#AB47BC",
+            fontcolor=white,
+            label="Process 3",
+            width=0.8,
+            height=0.6
         ];
         
         system_output_state [
@@ -64,9 +84,14 @@ digraph Figure2_State_Based_Approach {
             height=1.0
         ];
         
-        // Simple system flow
-        system_input_state -> system_dynamics [color="#9C27B0", style=bold];
-        system_dynamics -> system_output_state [color="#9C27B0", style=bold];
+        // System dynamics flow
+        system_input_state -> dynamics_process_1 [color="#9C27B0"];
+        system_input_state -> dynamics_process_2 [color="#9C27B0"];
+        dynamics_process_1 -> dynamics_process_2 [color="#BA68C8", label="feedback"];
+        dynamics_process_2 -> dynamics_process_3 [color="#BA68C8"];
+        dynamics_process_3 -> dynamics_process_1 [color="#BA68C8", style=dashed];
+        dynamics_process_1 -> system_output_state [color="#9C27B0"];
+        dynamics_process_3 -> system_output_state [color="#9C27B0"];
     }
     
     // Visual Output box with Visual Output State
