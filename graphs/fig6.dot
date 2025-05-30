@@ -1,0 +1,403 @@
+digraph Figure6_Feedback_Architecture {
+    rankdir=LR;
+    
+    // Graph styling
+    graph [bgcolor=white, fontname="Arial", fontsize=12, splines=curved];
+    node [fontname="Arial", fontsize=9];
+    edge [fontname="Arial", fontsize=8];
+    
+    // Left side inputs
+    subgraph cluster_left_inputs {
+        style=invis;
+        
+        // Mobile Device 1 (2 states + 1 feedback-only state)
+        subgraph cluster_mobile1 {
+            style=filled;
+            fillcolor="#E8F4FD";
+            color="#2196F3";
+            label="Mobile Device 1";
+            labelloc=bottom;
+            
+            m1_state_1 [
+                shape=circle,
+                style=filled,
+                fillcolor="#1976D2",
+                fontcolor=white,
+                label="A",
+                width=0.4,
+                height=0.4
+            ];
+            
+            m1_state_2 [
+                shape=circle,
+                style=filled,
+                fillcolor="#1976D2",
+                fontcolor=white,
+                label="B",
+                width=0.4,
+                height=0.4
+            ];
+            
+            // New feedback-only state
+            m1_state_3 [
+                shape=circle,
+                style=filled,
+                fillcolor="#4FC3F7",
+                fontcolor=white,
+                label="G",
+                width=0.4,
+                height=0.4
+            ];
+        }
+        
+        // Mobile Device 2 (3 states)
+        subgraph cluster_mobile2 {
+            style=filled;
+            fillcolor="#E8F4FD";
+            color="#2196F3";
+            label="Mobile Device 2";
+            labelloc=bottom;
+            
+            m2_state_1 [
+                shape=circle,
+                style=filled,
+                fillcolor="#1976D2",
+                fontcolor=white,
+                label="C",
+                width=0.4,
+                height=0.4
+            ];
+            
+            m2_state_2 [
+                shape=circle,
+                style=filled,
+                fillcolor="#1976D2",
+                fontcolor=white,
+                label="D",
+                width=0.4,
+                height=0.4
+            ];
+            
+            m2_state_3 [
+                shape=circle,
+                style=filled,
+                fillcolor="#1976D2",
+                fontcolor=white,
+                label="E",
+                width=0.4,
+                height=0.4
+            ];
+        }
+        
+        // Mobile Device 3 (1 state)
+        subgraph cluster_mobile3 {
+            style=filled;
+            fillcolor="#E8F4FD";
+            color="#2196F3";
+            label="Mobile Device 3";
+            labelloc=bottom;
+            
+            m3_state_1 [
+                shape=circle,
+                style=filled,
+                fillcolor="#1976D2",
+                fontcolor=white,
+                label="F",
+                width=0.4,
+                height=0.4
+            ];
+        }
+        
+        // External Environmental Data (new input channel)
+        subgraph cluster_external {
+            style=filled;
+            fillcolor="#E8F4FD";
+            color="#2196F3";
+            label="External Environmental Data";
+            labelloc=bottom;
+            
+            ext_state_1 [
+                shape=circle,
+                style=filled,
+                fillcolor="#1976D2",
+                fontcolor=white,
+                label="H",
+                width=0.4,
+                height=0.4
+            ];
+        }
+        
+        // Feedback DT Box (positioned near inputs for direct feedback)
+        dt_feedback [
+            shape=box,
+            style=filled,
+            fillcolor="#FFE0E0",
+            color="#E53935",
+            label="Feedback DT\n(7×3 Matrix)",
+            width=1.0,
+            height=1.0
+        ];
+    }
+    
+    // Center processing
+    subgraph cluster_center {
+        style=invis;
+        
+        // Input DT Box
+        dt_input [
+            shape=box,
+            style=filled,
+            fillcolor="#EEEEEE",
+            label="Input-Side DT\n(7×3 Matrix)",
+            width=1.0,
+            height=1.0
+        ];
+        
+        // System Core
+        subgraph cluster_system {
+            style=filled;
+            fillcolor="#F3E5F5";
+            color="#9C27B0";
+            label="System Core\n(Feedback Architecture)";
+            labelloc=bottom;
+            
+            si_state_1 [
+                shape=circle,
+                style=filled,
+                fillcolor="#7B1FA2",
+                fontcolor=white,
+                label="1",
+                width=0.4,
+                height=0.4
+            ];
+            
+            si_state_2 [
+                shape=circle,
+                style=filled,
+                fillcolor="#7B1FA2",
+                fontcolor=white,
+                label="2",
+                width=0.4,
+                height=0.4
+            ];
+            
+            si_state_3 [
+                shape=circle,
+                style=filled,
+                fillcolor="#7B1FA2",
+                fontcolor=white,
+                label="3",
+                width=0.4,
+                height=0.4
+            ];
+            
+            // System Dynamics
+            system_dynamics [
+                shape=diamond,
+                style=filled,
+                fillcolor="#AB47BC",
+                fontcolor=white,
+                label="System\nDynamics",
+                width=1.0,
+                height=0.6
+            ];
+            
+            so_state_1 [
+                shape=circle,
+                style=filled,
+                fillcolor="#7B1FA2",
+                fontcolor=white,
+                label="α",
+                width=0.4,
+                height=0.4
+            ];
+            
+            so_state_2 [
+                shape=circle,
+                style=filled,
+                fillcolor="#7B1FA2",
+                fontcolor=white,
+                label="β",
+                width=0.4,
+                height=0.4
+            ];
+            
+            so_state_3 [
+                shape=circle,
+                style=filled,
+                fillcolor="#7B1FA2",
+                fontcolor=white,
+                label="γ",
+                width=0.4,
+                height=0.4
+            ];
+            
+            // System flow
+            si_state_1 -> system_dynamics [color="#9C27B0"];
+            si_state_2 -> system_dynamics [color="#9C27B0"];
+            si_state_3 -> system_dynamics [color="#9C27B0"];
+            system_dynamics -> so_state_1 [color="#9C27B0"];
+            system_dynamics -> so_state_2 [color="#9C27B0"];
+            system_dynamics -> so_state_3 [color="#9C27B0"];
+        }
+        
+        // Output DT Box
+        dt_output [
+            shape=box,
+            style=filled,
+            fillcolor="#EEEEEE",
+            label="Output-Side DT\n(3×7 Matrix)",
+            width=1.0,
+            height=1.0
+        ];
+    }
+    
+    // Right side outputs
+    subgraph cluster_right_outputs {
+        style=invis;
+        
+        // Projector (2 states)
+        subgraph cluster_projector {
+            style=filled;
+            fillcolor="#FFF3E0";
+            color="#FF9800";
+            label="Projector";
+            labelloc=bottom;
+            
+            p_state_1 [
+                shape=circle,
+                style=filled,
+                fillcolor="#F57C00",
+                fontcolor=white,
+                label="X",
+                width=0.4,
+                height=0.4
+            ];
+            
+            p_state_2 [
+                shape=circle,
+                style=filled,
+                fillcolor="#F57C00",
+                fontcolor=white,
+                label="Y",
+                width=0.4,
+                height=0.4
+            ];
+        }
+        
+        // Desktop Screen 1 (2 states)
+        subgraph cluster_desktop1 {
+            style=filled;
+            fillcolor="#FFF3E0";
+            color="#FF9800";
+            label="Desktop Screen 1";
+            labelloc=bottom;
+            
+            d1_state_1 [
+                shape=circle,
+                style=filled,
+                fillcolor="#F57C00",
+                fontcolor=white,
+                label="U",
+                width=0.4,
+                height=0.4
+            ];
+            
+            d1_state_2 [
+                shape=circle,
+                style=filled,
+                fillcolor="#F57C00",
+                fontcolor=white,
+                label="V",
+                width=0.4,
+                height=0.4
+            ];
+        }
+        
+        // Desktop Screen 2 (2 states)
+        subgraph cluster_desktop2 {
+            style=filled;
+            fillcolor="#FFF3E0";
+            color="#FF9800";
+            label="Desktop Screen 2";
+            labelloc=bottom;
+            
+            d2_state_1 [
+                shape=circle,
+                style=filled,
+                fillcolor="#F57C00",
+                fontcolor=white,
+                label="W",
+                width=0.4,
+                height=0.4
+            ];
+            
+            d2_state_2 [
+                shape=circle,
+                style=filled,
+                fillcolor="#F57C00",
+                fontcolor=white,
+                label="Z",
+                width=0.4,
+                height=0.4
+            ];
+        }
+        
+        // Desktop Screen 3 (1 state)
+        subgraph cluster_desktop3 {
+            style=filled;
+            fillcolor="#FFF3E0";
+            color="#FF9800";
+            label="Desktop Screen 3";
+            labelloc=bottom;
+            
+            d3_state_1 [
+                shape=circle,
+                style=filled,
+                fillcolor="#F57C00",
+                fontcolor=white,
+                label="Q",
+                width=0.4,
+                height=0.4
+            ];
+        }
+    }
+    
+
+    
+    // Forward flow connections (restored missing arrows)
+    m1_state_1 -> dt_input [color="#666666", style=bold];
+    m1_state_2 -> dt_input [color="#666666", style=bold];
+    m2_state_1 -> dt_input [color="#666666", style=bold];
+    m2_state_2 -> dt_input [color="#666666", style=bold];
+    m2_state_3 -> dt_input [color="#666666", style=bold];
+    m3_state_1 -> dt_input [color="#666666", style=bold];
+    ext_state_1 -> dt_input [color="#666666", style=bold];
+    
+    // NOTE: m1_state_3 (G) does NOT connect to input DT - feedback only
+    
+    dt_input -> si_state_1 [color="#666666", style=bold];
+    dt_input -> si_state_2 [color="#666666", style=bold];
+    dt_input -> si_state_3 [color="#666666", style=bold];
+    
+    so_state_1 -> dt_output [color="#666666", style=bold];
+    so_state_2 -> dt_output [color="#666666", style=bold];
+    so_state_3 -> dt_output [color="#666666", style=bold];
+    
+    dt_output -> p_state_1 [color="#666666", style=bold];
+    dt_output -> p_state_2 [color="#666666", style=bold];
+    dt_output -> d1_state_1 [color="#666666", style=bold];
+    dt_output -> d1_state_2 [color="#666666", style=bold];
+    dt_output -> d2_state_1 [color="#666666", style=bold];
+    dt_output -> d2_state_2 [color="#666666", style=bold];
+    dt_output -> d3_state_1 [color="#666666", style=bold];
+    
+    // Feedback connections (NO ARROWS - simple line connection)
+    // Cache bust: 2025-05-30-23:31 - NO DIRECTION LINE
+    dt_output -> dt_feedback [color="#E53935", style=bold, label="feedback", dir="none", arrowhead="none", arrowtail="none"];
+    
+    // Direct feedback to nearby states (much shorter paths)
+    dt_feedback -> m1_state_1 [color="#E53935", style=dashed]; // A
+    dt_feedback -> m2_state_1 [color="#E53935", style=dashed]; // C
+    dt_feedback -> m1_state_3 [color="#E53935", style=dashed]; // G (feedback-only)
+} 
