@@ -1,0 +1,289 @@
+digraph Figure8_Economic_MDWA_System {
+    rankdir=TB;
+    
+    // Graph styling
+    graph [bgcolor=white, fontname="Arial", fontsize=12, splines=curved, overlap=false];
+    node [fontname="Arial", fontsize=9];
+    edge [fontname="Arial", fontsize=8];
+    
+    // ===== TOP LAYER: INPUT DEVICES =====
+    subgraph cluster_inputs {
+        style=filled;
+        fillcolor="#E8F4FD";
+        color="#2196F3";
+        label="Input Devices";
+        labelloc=bottom;
+        
+        // Mobile devices with economic interface states
+        mobile1 [shape=box, style=filled, fillcolor="#1976D2", fontcolor=white, label="Mobile 1\nEconomic Trading\nInterface", width=1.2, height=0.8];
+        mobile2 [shape=box, style=filled, fillcolor="#1976D2", fontcolor=white, label="Mobile 2\nPolicy Control\nInterface", width=1.2, height=0.8];
+        mobile3 [shape=box, style=filled, fillcolor="#1976D2", fontcolor=white, label="Mobile 3\nMarket Data\nInterface", width=1.2, height=0.8];
+        tablet1 [shape=box, style=filled, fillcolor="#1976D2", fontcolor=white, label="Tablet 1\nCentral Bank\nDashboard", width=1.2, height=0.8];
+        tablet2 [shape=box, style=filled, fillcolor="#1976D2", fontcolor=white, label="Tablet 2\nFiscal Policy\nControl", width=1.2, height=0.8];
+        
+        // Input states for each device
+        mobile1_states [shape=ellipse, style=filled, fillcolor="#42A5F5", fontcolor=black, label="Trading Actions\nMarket Orders\nRisk Preferences", width=1.0, height=0.6];
+        mobile2_states [shape=ellipse, style=filled, fillcolor="#42A5F5", fontcolor=black, label="Policy Votes\nRate Preferences\nMonetary Stance", width=1.0, height=0.6];
+        mobile3_states [shape=ellipse, style=filled, fillcolor="#42A5F5", fontcolor=black, label="Data Queries\nChart Interactions\nMarket Sentiment", width=1.0, height=0.6];
+        tablet1_states [shape=ellipse, style=filled, fillcolor="#42A5F5", fontcolor=black, label="CB Decisions\nTarget Settings\nCommunication", width=1.0, height=0.6];
+        tablet2_states [shape=ellipse, style=filled, fillcolor="#42A5F5", fontcolor=black, label="Spending Choices\nTax Adjustments\nFiscal Targets", width=1.0, height=0.6];
+        
+        mobile1 -> mobile1_states [color="#2196F3"];
+        mobile2 -> mobile2_states [color="#2196F3"];
+        mobile3 -> mobile3_states [color="#2196F3"];
+        tablet1 -> tablet1_states [color="#2196F3"];
+        tablet2 -> tablet2_states [color="#2196F3"];
+    }
+    
+    // ===== INPUT-SIDE DIMENSIONAL TRANSFORMATION =====
+    subgraph cluster_input_dt {
+        style=filled;
+        fillcolor="#F5F5F5";
+        color="#666666";
+        label="Input-side Dimensional Transformation";
+        labelloc=bottom;
+        
+        dt_input [shape=diamond, style=filled, fillcolor="#757575", fontcolor=white, label="Input DT\n(5×8 Matrix)\nDevice→Economic", width=1.5, height=1.0];
+        
+        // System input states - processed economic inputs
+        sys_monetary_shock [shape=circle, style=filled, fillcolor="#9E9E9E", fontcolor=white, label="Monetary\nShock", width=0.6, height=0.6];
+        sys_fiscal_shock [shape=circle, style=filled, fillcolor="#9E9E9E", fontcolor=white, label="Fiscal\nShock", width=0.6, height=0.6];
+        sys_demand_shock [shape=circle, style=filled, fillcolor="#9E9E9E", fontcolor=white, label="Demand\nShock", width=0.6, height=0.6];
+        sys_tech_shock [shape=circle, style=filled, fillcolor="#9E9E9E", fontcolor=white, label="Technology\nShock", width=0.6, height=0.6];
+        sys_oil_shock [shape=circle, style=filled, fillcolor="#9E9E9E", fontcolor=white, label="Oil Price\nShock", width=0.6, height=0.6];
+        sys_policy_change [shape=circle, style=filled, fillcolor="#9E9E9E", fontcolor=white, label="Policy\nChange", width=0.6, height=0.6];
+        sys_market_sentiment [shape=circle, style=filled, fillcolor="#9E9E9E", fontcolor=white, label="Market\nSentiment", width=0.6, height=0.6];
+        sys_expectations [shape=circle, style=filled, fillcolor="#9E9E9E", fontcolor=white, label="Economic\nExpectations", width=0.6, height=0.6];
+    }
+    
+    // ===== ECONOMIC SYSTEM DYNAMICS =====
+    subgraph cluster_economic_system {
+        style=filled;
+        fillcolor="#F3E5F5";
+        color="#9C27B0";
+        label="Economic System Dynamics";
+        labelloc=bottom;
+        
+        // Central Bank System
+        subgraph cluster_central_bank {
+            style=filled;
+            fillcolor="#E1BEE7";
+            color="#7B1FA2";
+            label="Central Bank";
+            
+            taylor_rule [shape=ellipse, style=filled, fillcolor="#AB47BC", fontcolor=white, label="Taylor Rule\nOptimization", width=1.0, height=0.6];
+            inflation_target [shape=ellipse, style=filled, fillcolor="#AB47BC", fontcolor=white, label="Inflation\nTargeting", width=1.0, height=0.6];
+            policy_transmission [shape=ellipse, style=filled, fillcolor="#AB47BC", fontcolor=white, label="Policy\nTransmission", width=1.0, height=0.6];
+        }
+        
+        // Household System
+        subgraph cluster_households {
+            style=filled;
+            fillcolor="#E1BEE7";
+            color="#7B1FA2";
+            label="Households";
+            
+            utility_max [shape=ellipse, style=filled, fillcolor="#AB47BC", fontcolor=white, label="Utility\nMaximization", width=1.0, height=0.6];
+            consumption_choice [shape=ellipse, style=filled, fillcolor="#AB47BC", fontcolor=white, label="Consumption\nChoice", width=1.0, height=0.6];
+            labor_supply [shape=ellipse, style=filled, fillcolor="#AB47BC", fontcolor=white, label="Labor Supply\nDecision", width=1.0, height=0.6];
+        }
+        
+        // Firm System
+        subgraph cluster_firms {
+            style=filled;
+            fillcolor="#E1BEE7";
+            color="#7B1FA2";
+            label="Firms";
+            
+            profit_max [shape=ellipse, style=filled, fillcolor="#AB47BC", fontcolor=white, label="Profit\nMaximization", width=1.0, height=0.6];
+            production_function [shape=ellipse, style=filled, fillcolor="#AB47BC", fontcolor=white, label="Production\nFunction", width=1.0, height=0.6];
+            price_setting [shape=ellipse, style=filled, fillcolor="#AB47BC", fontcolor=white, label="Price Setting\n(Calvo)", width=1.0, height=0.6];
+        }
+        
+        // Government System
+        subgraph cluster_government {
+            style=filled;
+            fillcolor="#E1BEE7";
+            color="#7B1FA2";
+            label="Government";
+            
+            fiscal_rule [shape=ellipse, style=filled, fillcolor="#AB47BC", fontcolor=white, label="Fiscal Rule\nOptimization", width=1.0, height=0.6];
+            spending_allocation [shape=ellipse, style=filled, fillcolor="#AB47BC", fontcolor=white, label="Spending\nAllocation", width=1.0, height=0.6];
+            debt_sustainability [shape=ellipse, style=filled, fillcolor="#AB47BC", fontcolor=white, label="Debt\nSustainability", width=1.0, height=0.6];
+        }
+        
+        // Market Clearing
+        market_equilibrium [shape=diamond, style=filled, fillcolor="#AB47BC", fontcolor=white, label="General\nEquilibrium", width=1.2, height=0.8];
+        
+        // System output states
+        sys_gdp [shape=circle, style=filled, fillcolor="#7B1FA2", fontcolor=white, label="GDP\nLevel", width=0.6, height=0.6];
+        sys_inflation [shape=circle, style=filled, fillcolor="#7B1FA2", fontcolor=white, label="Inflation\nRate", width=0.6, height=0.6];
+        sys_unemployment [shape=circle, style=filled, fillcolor="#7B1FA2", fontcolor=white, label="Unemployment\nRate", width=0.6, height=0.6];
+        sys_interest [shape=circle, style=filled, fillcolor="#7B1FA2", fontcolor=white, label="Interest\nRate", width=0.6, height=0.6];
+        sys_exchange [shape=circle, style=filled, fillcolor="#7B1FA2", fontcolor=white, label="Exchange\nRate", width=0.6, height=0.6];
+        sys_fiscal_balance [shape=circle, style=filled, fillcolor="#7B1FA2", fontcolor=white, label="Fiscal\nBalance", width=0.6, height=0.6];
+        sys_market_volatility [shape=circle, style=filled, fillcolor="#7B1FA2", fontcolor=white, label="Market\nVolatility", width=0.6, height=0.6];
+        sys_debt_ratio [shape=circle, style=filled, fillcolor="#7B1FA2", fontcolor=white, label="Debt-to-GDP\nRatio", width=0.6, height=0.6];
+    }
+    
+    // ===== OUTPUT-SIDE DIMENSIONAL TRANSFORMATION =====
+    subgraph cluster_output_dt {
+        style=filled;
+        fillcolor="#F5F5F5";
+        color="#666666";
+        label="Output-side Dimensional Transformation";
+        labelloc=bottom;
+        
+        dt_output [shape=diamond, style=filled, fillcolor="#757575", fontcolor=white, label="Output DT\n(8×12 Matrix)\nEconomic→Visual", width=1.5, height=1.0];
+        
+        // Visual output states - interface representations
+        vis_market_dashboard [shape=circle, style=filled, fillcolor="#9E9E9E", fontcolor=white, label="Market\nDashboard", width=0.6, height=0.6];
+        vis_trading_floor [shape=circle, style=filled, fillcolor="#9E9E9E", fontcolor=white, label="Trading Floor\nSimulation", width=0.6, height=0.6];
+        vis_policy_room [shape=circle, style=filled, fillcolor="#9E9E9E", fontcolor=white, label="Policy Room\nInterface", width=0.6, height=0.6];
+        vis_economic_city [shape=circle, style=filled, fillcolor="#9E9E9E", fontcolor=white, label="Economic City\n3D Model", width=0.6, height=0.6];
+        vis_data_streams [shape=circle, style=filled, fillcolor="#9E9E9E", fontcolor=white, label="Real-time\nData Streams", width=0.6, height=0.6];
+        vis_crisis_alerts [shape=circle, style=filled, fillcolor="#9E9E9E", fontcolor=white, label="Crisis Alert\nSystem", width=0.6, height=0.6];
+        vis_growth_metrics [shape=circle, style=filled, fillcolor="#9E9E9E", fontcolor=white, label="Growth\nMetrics", width=0.6, height=0.6];
+        vis_policy_effects [shape=circle, style=filled, fillcolor="#9E9E9E", fontcolor=white, label="Policy Impact\nVisualization", width=0.6, height=0.6];
+        vis_market_mood [shape=circle, style=filled, fillcolor="#9E9E9E", fontcolor=white, label="Market Mood\nIndicator", width=0.6, height=0.6];
+        vis_fiscal_health [shape=circle, style=filled, fillcolor="#9E9E9E", fontcolor=white, label="Fiscal Health\nMeter", width=0.6, height=0.6];
+        vis_employment_map [shape=circle, style=filled, fillcolor="#9E9E9E", fontcolor=white, label="Employment\nHeat Map", width=0.6, height=0.6];
+        vis_currency_flows [shape=circle, style=filled, fillcolor="#9E9E9E", fontcolor=white, label="Currency Flow\nAnimation", width=0.6, height=0.6];
+    }
+    
+    // ===== BOTTOM LAYER: OUTPUT DEVICES =====
+    subgraph cluster_outputs {
+        style=filled;
+        fillcolor="#FFF3E0";
+        color="#FF9800";
+        label="Output Devices";
+        labelloc=bottom;
+        
+        // Output devices
+        projector1 [shape=box, style=filled, fillcolor="#F57C00", fontcolor=white, label="Projector 1\nEconomic City\nVisualization", width=1.5, height=1.0];
+        projector2 [shape=box, style=filled, fillcolor="#F57C00", fontcolor=white, label="Projector 2\nMarket Trading\nFloor", width=1.5, height=1.0];
+        desktop1 [shape=box, style=filled, fillcolor="#F57C00", fontcolor=white, label="Desktop 1\nCentral Bank\nDashboard", width=1.2, height=0.8];
+        desktop2 [shape=box, style=filled, fillcolor="#F57C00", fontcolor=white, label="Desktop 2\nPolicy Analysis\nCenter", width=1.2, height=0.8];
+        desktop3 [shape=box, style=filled, fillcolor="#F57C00", fontcolor=white, label="Desktop 3\nMarket Data\nTerminal", width=1.2, height=0.8];
+        tv_screen [shape=box, style=filled, fillcolor="#F57C00", fontcolor=white, label="TV Screen\nEconomic News\n& Alerts", width=1.2, height=0.8];
+        
+        // Output device states
+        proj1_states [shape=ellipse, style=filled, fillcolor="#FFB74D", fontcolor=black, label="3D City Growth\nBuilding Heights\nInfrastructure", width=1.0, height=0.6];
+        proj2_states [shape=ellipse, style=filled, fillcolor="#FFB74D", fontcolor=black, label="Trading Activity\nPrice Movements\nVolume Flows", width=1.0, height=0.6];
+        desk1_states [shape=ellipse, style=filled, fillcolor="#FFB74D", fontcolor=black, label="Interest Rates\nInflation Charts\nPolicy Tools", width=1.0, height=0.6];
+        desk2_states [shape=ellipse, style=filled, fillcolor="#FFB74D", fontcolor=black, label="Policy Effects\nFiscal Scenarios\nImpact Analysis", width=1.0, height=0.6];
+        desk3_states [shape=ellipse, style=filled, fillcolor="#FFB74D", fontcolor=black, label="Live Data Feeds\nMarket Indicators\nTrend Analysis", width=1.0, height=0.6];
+        tv_states [shape=ellipse, style=filled, fillcolor="#FFB74D", fontcolor=black, label="Breaking News\nCrisis Alerts\nPolicy Updates", width=1.0, height=0.6];
+        
+        projector1 -> proj1_states [color="#FF9800"];
+        projector2 -> proj2_states [color="#FF9800"];
+        desktop1 -> desk1_states [color="#FF9800"];
+        desktop2 -> desk2_states [color="#FF9800"];
+        desktop3 -> desk3_states [color="#FF9800"];
+        tv_screen -> tv_states [color="#FF9800"];
+    }
+    
+    // ===== CONNECTION FLOWS =====
+    
+    // Input states to Input DT
+    mobile1_states -> dt_input [color="#666666"];
+    mobile2_states -> dt_input [color="#666666"];
+    mobile3_states -> dt_input [color="#666666"];
+    tablet1_states -> dt_input [color="#666666"];
+    tablet2_states -> dt_input [color="#666666"];
+    
+    // Input DT to System Input States
+    dt_input -> sys_monetary_shock [color="#666666"];
+    dt_input -> sys_fiscal_shock [color="#666666"];
+    dt_input -> sys_demand_shock [color="#666666"];
+    dt_input -> sys_tech_shock [color="#666666"];
+    dt_input -> sys_oil_shock [color="#666666"];
+    dt_input -> sys_policy_change [color="#666666"];
+    dt_input -> sys_market_sentiment [color="#666666"];
+    dt_input -> sys_expectations [color="#666666"];
+    
+    // System Input States to Economic Dynamics
+    sys_monetary_shock -> taylor_rule [color="#9C27B0"];
+    sys_fiscal_shock -> fiscal_rule [color="#9C27B0"];
+    sys_demand_shock -> utility_max [color="#9C27B0"];
+    sys_tech_shock -> production_function [color="#9C27B0"];
+    sys_policy_change -> policy_transmission [color="#9C27B0"];
+    sys_market_sentiment -> price_setting [color="#9C27B0"];
+    sys_expectations -> inflation_target [color="#9C27B0"];
+    
+    // Economic Dynamics Internal Flows
+    taylor_rule -> policy_transmission [color="#9C27B0"];
+    inflation_target -> policy_transmission [color="#9C27B0"];
+    utility_max -> consumption_choice [color="#9C27B0"];
+    utility_max -> labor_supply [color="#9C27B0"];
+    profit_max -> production_function [color="#9C27B0"];
+    profit_max -> price_setting [color="#9C27B0"];
+    fiscal_rule -> spending_allocation [color="#9C27B0"];
+    
+    // Economic Dynamics to Market Equilibrium
+    policy_transmission -> market_equilibrium [color="#9C27B0"];
+    consumption_choice -> market_equilibrium [color="#9C27B0"];
+    labor_supply -> market_equilibrium [color="#9C27B0"];
+    production_function -> market_equilibrium [color="#9C27B0"];
+    price_setting -> market_equilibrium [color="#9C27B0"];
+    spending_allocation -> market_equilibrium [color="#9C27B0"];
+    debt_sustainability -> market_equilibrium [color="#9C27B0"];
+    
+    // Market Equilibrium to System Output States
+    market_equilibrium -> sys_gdp [color="#9C27B0"];
+    market_equilibrium -> sys_inflation [color="#9C27B0"];
+    market_equilibrium -> sys_unemployment [color="#9C27B0"];
+    market_equilibrium -> sys_interest [color="#9C27B0"];
+    market_equilibrium -> sys_exchange [color="#9C27B0"];
+    market_equilibrium -> sys_fiscal_balance [color="#9C27B0"];
+    market_equilibrium -> sys_market_volatility [color="#9C27B0"];
+    market_equilibrium -> sys_debt_ratio [color="#9C27B0"];
+    
+    // System Output States to Output DT
+    sys_gdp -> dt_output [color="#666666"];
+    sys_inflation -> dt_output [color="#666666"];
+    sys_unemployment -> dt_output [color="#666666"];
+    sys_interest -> dt_output [color="#666666"];
+    sys_exchange -> dt_output [color="#666666"];
+    sys_fiscal_balance -> dt_output [color="#666666"];
+    sys_market_volatility -> dt_output [color="#666666"];
+    sys_debt_ratio -> dt_output [color="#666666"];
+    
+    // Output DT to Visual Output States
+    dt_output -> vis_market_dashboard [color="#666666"];
+    dt_output -> vis_trading_floor [color="#666666"];
+    dt_output -> vis_policy_room [color="#666666"];
+    dt_output -> vis_economic_city [color="#666666"];
+    dt_output -> vis_data_streams [color="#666666"];
+    dt_output -> vis_crisis_alerts [color="#666666"];
+    dt_output -> vis_growth_metrics [color="#666666"];
+    dt_output -> vis_policy_effects [color="#666666"];
+    dt_output -> vis_market_mood [color="#666666"];
+    dt_output -> vis_fiscal_health [color="#666666"];
+    dt_output -> vis_employment_map [color="#666666"];
+    dt_output -> vis_currency_flows [color="#666666"];
+    
+    // Visual Output States to Output Devices
+    vis_economic_city -> proj1_states [color="#FF9800"];
+    vis_trading_floor -> proj2_states [color="#FF9800"];
+    vis_market_dashboard -> desk1_states [color="#FF9800"];
+    vis_policy_room -> desk2_states [color="#FF9800"];
+    vis_data_streams -> desk3_states [color="#FF9800"];
+    vis_crisis_alerts -> tv_states [color="#FF9800"];
+    vis_growth_metrics -> proj1_states [color="#FF9800"];
+    vis_policy_effects -> desk2_states [color="#FF9800"];
+    vis_market_mood -> proj2_states [color="#FF9800"];
+    vis_fiscal_health -> desk1_states [color="#FF9800"];
+    vis_employment_map -> proj1_states [color="#FF9800"];
+    vis_currency_flows -> desk3_states [color="#FF9800"];
+    
+    // ===== FEEDBACK LOOPS =====
+    
+    // Expectation feedback (key DSGE feature)
+    sys_inflation -> sys_expectations [color="#E53935", style=dashed, label="expectations"];
+    sys_gdp -> sys_market_sentiment [color="#E53935", style=dashed, label="feedback"];
+    
+    // Policy feedback
+    sys_fiscal_balance -> sys_fiscal_shock [color="#E53935", style=dotted, label="debt dynamics"];
+    sys_interest -> sys_monetary_shock [color="#E53935", style=dotted, label="rate transmission"];
+} 

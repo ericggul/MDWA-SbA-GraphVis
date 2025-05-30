@@ -1,403 +1,515 @@
-digraph Figure6_Feedback_Architecture {
-    rankdir=LR;
+digraph Figure7_Complex_MultiSystem_Architecture {
+    rankdir=TB;
     
     // Graph styling
-    graph [bgcolor=white, fontname="Arial", fontsize=12, splines=curved];
+    graph [bgcolor=white, fontname="Arial", fontsize=12, splines=curved, overlap=false];
     node [fontname="Arial", fontsize=9];
     edge [fontname="Arial", fontsize=8];
     
-    // Left side inputs
-    subgraph cluster_left_inputs {
+    // TOP ROW: Inputs 1-4
+    subgraph cluster_top_inputs {
         style=invis;
+        rank=source;
         
-        // Mobile Device 1 (2 states + 1 feedback-only state)
-        subgraph cluster_mobile1 {
+        // Input 1 (2 states)
+        subgraph cluster_input1 {
             style=filled;
             fillcolor="#E8F4FD";
             color="#2196F3";
-            label="Mobile Device 1";
+            label="Input 1";
             labelloc=bottom;
             
-            m1_state_1 [
-                shape=circle,
-                style=filled,
-                fillcolor="#1976D2",
-                fontcolor=white,
-                label="A",
-                width=0.4,
-                height=0.4
-            ];
-            
-            m1_state_2 [
-                shape=circle,
-                style=filled,
-                fillcolor="#1976D2",
-                fontcolor=white,
-                label="B",
-                width=0.4,
-                height=0.4
-            ];
-            
-            // New feedback-only state
-            m1_state_3 [
-                shape=circle,
-                style=filled,
-                fillcolor="#4FC3F7",
-                fontcolor=white,
-                label="G",
-                width=0.4,
-                height=0.4
-            ];
+            i1_a [shape=circle, style=filled, fillcolor="#1976D2", fontcolor=white, label="A", width=0.3, height=0.3];
+            i1_b [shape=circle, style=filled, fillcolor="#1976D2", fontcolor=white, label="B", width=0.3, height=0.3];
         }
         
-        // Mobile Device 2 (3 states)
-        subgraph cluster_mobile2 {
+        // Input 2 (2 states)
+        subgraph cluster_input2 {
             style=filled;
             fillcolor="#E8F4FD";
             color="#2196F3";
-            label="Mobile Device 2";
+            label="Input 2";
             labelloc=bottom;
             
-            m2_state_1 [
-                shape=circle,
-                style=filled,
-                fillcolor="#1976D2",
-                fontcolor=white,
-                label="C",
-                width=0.4,
-                height=0.4
-            ];
-            
-            m2_state_2 [
-                shape=circle,
-                style=filled,
-                fillcolor="#1976D2",
-                fontcolor=white,
-                label="D",
-                width=0.4,
-                height=0.4
-            ];
-            
-            m2_state_3 [
-                shape=circle,
-                style=filled,
-                fillcolor="#1976D2",
-                fontcolor=white,
-                label="E",
-                width=0.4,
-                height=0.4
-            ];
+            i2_c [shape=circle, style=filled, fillcolor="#1976D2", fontcolor=white, label="C", width=0.3, height=0.3];
+            i2_d [shape=circle, style=filled, fillcolor="#1976D2", fontcolor=white, label="D", width=0.3, height=0.3];
         }
         
-        // Mobile Device 3 (1 state)
-        subgraph cluster_mobile3 {
+        // Input 3 (2 states)
+        subgraph cluster_input3 {
             style=filled;
             fillcolor="#E8F4FD";
             color="#2196F3";
-            label="Mobile Device 3";
+            label="Input 3";
             labelloc=bottom;
             
-            m3_state_1 [
-                shape=circle,
-                style=filled,
-                fillcolor="#1976D2",
-                fontcolor=white,
-                label="F",
-                width=0.4,
-                height=0.4
-            ];
+            i3_e [shape=circle, style=filled, fillcolor="#1976D2", fontcolor=white, label="E", width=0.3, height=0.3];
+            i3_f [shape=circle, style=filled, fillcolor="#1976D2", fontcolor=white, label="F", width=0.3, height=0.3];
         }
         
-        // External Environmental Data (new input channel)
-        subgraph cluster_external {
+        // Input 4 (2 states)
+        subgraph cluster_input4 {
             style=filled;
             fillcolor="#E8F4FD";
             color="#2196F3";
-            label="External Environmental Data";
+            label="Input 4";
             labelloc=bottom;
             
-            ext_state_1 [
-                shape=circle,
-                style=filled,
-                fillcolor="#1976D2",
-                fontcolor=white,
-                label="H",
-                width=0.4,
-                height=0.4
-            ];
+            i4_g [shape=circle, style=filled, fillcolor="#1976D2", fontcolor=white, label="G", width=0.3, height=0.3];
+            i4_h [shape=circle, style=filled, fillcolor="#1976D2", fontcolor=white, label="H", width=0.3, height=0.3];
         }
-        
-        // Feedback DT Box (positioned near inputs for direct feedback)
-        dt_feedback [
-            shape=box,
-            style=filled,
-            fillcolor="#FFE0E0",
-            color="#E53935",
-            label="Feedback DT\n(7×3 Matrix)",
-            width=1.0,
-            height=1.0
-        ];
     }
     
-    // Center processing
-    subgraph cluster_center {
+    // MIDDLE-TOP ROW: Input DTs 1-2 and Systems 1-2
+    subgraph cluster_middle_top {
         style=invis;
         
-        // Input DT Box
-        dt_input [
-            shape=box,
-            style=filled,
-            fillcolor="#EEEEEE",
-            label="Input-Side DT\n(7×3 Matrix)",
-            width=1.0,
-            height=1.0
-        ];
+        // Input-side DT 1
+        dt_i1 [shape=box, style=filled, fillcolor="#EEEEEE", label="Input DT-1\n(8×4 Matrix)", width=1.0, height=0.8];
         
-        // System Core
-        subgraph cluster_system {
+        // System 1 (3 input, 2 output states)
+        subgraph cluster_system1 {
             style=filled;
             fillcolor="#F3E5F5";
             color="#9C27B0";
-            label="System Core\n(Feedback Architecture)";
+            label="System 1";
             labelloc=bottom;
             
-            si_state_1 [
-                shape=circle,
-                style=filled,
-                fillcolor="#7B1FA2",
-                fontcolor=white,
-                label="1",
-                width=0.4,
-                height=0.4
-            ];
-            
-            si_state_2 [
-                shape=circle,
-                style=filled,
-                fillcolor="#7B1FA2",
-                fontcolor=white,
-                label="2",
-                width=0.4,
-                height=0.4
-            ];
-            
-            si_state_3 [
-                shape=circle,
-                style=filled,
-                fillcolor="#7B1FA2",
-                fontcolor=white,
-                label="3",
-                width=0.4,
-                height=0.4
-            ];
-            
-            // System Dynamics
-            system_dynamics [
-                shape=diamond,
-                style=filled,
-                fillcolor="#AB47BC",
-                fontcolor=white,
-                label="System\nDynamics",
-                width=1.0,
-                height=0.6
-            ];
-            
-            so_state_1 [
-                shape=circle,
-                style=filled,
-                fillcolor="#7B1FA2",
-                fontcolor=white,
-                label="α",
-                width=0.4,
-                height=0.4
-            ];
-            
-            so_state_2 [
-                shape=circle,
-                style=filled,
-                fillcolor="#7B1FA2",
-                fontcolor=white,
-                label="β",
-                width=0.4,
-                height=0.4
-            ];
-            
-            so_state_3 [
-                shape=circle,
-                style=filled,
-                fillcolor="#7B1FA2",
-                fontcolor=white,
-                label="γ",
-                width=0.4,
-                height=0.4
-            ];
-            
-            // System flow
-            si_state_1 -> system_dynamics [color="#9C27B0"];
-            si_state_2 -> system_dynamics [color="#9C27B0"];
-            si_state_3 -> system_dynamics [color="#9C27B0"];
-            system_dynamics -> so_state_1 [color="#9C27B0"];
-            system_dynamics -> so_state_2 [color="#9C27B0"];
-            system_dynamics -> so_state_3 [color="#9C27B0"];
+            s1_in1 [shape=circle, style=filled, fillcolor="#7B1FA2", fontcolor=white, label="1", width=0.3, height=0.3];
+            s1_in2 [shape=circle, style=filled, fillcolor="#7B1FA2", fontcolor=white, label="2", width=0.3, height=0.3];
+            s1_in3 [shape=circle, style=filled, fillcolor="#7B1FA2", fontcolor=white, label="3", width=0.3, height=0.3];
+            s1_dyn [shape=diamond, style=filled, fillcolor="#AB47BC", fontcolor=white, label="System Dynamics", width=0.6, height=0.4];
+            s1_out1 [shape=circle, style=filled, fillcolor="#7B1FA2", fontcolor=white, label="α", width=0.3, height=0.3];
+            s1_out2 [shape=circle, style=filled, fillcolor="#7B1FA2", fontcolor=white, label="β", width=0.3, height=0.3];
         }
         
-        // Output DT Box
-        dt_output [
-            shape=box,
-            style=filled,
-            fillcolor="#EEEEEE",
-            label="Output-Side DT\n(3×7 Matrix)",
-            width=1.0,
-            height=1.0
-        ];
+        // Output-side DT 1
+        dt_o1 [shape=box, style=filled, fillcolor="#EEEEEE", label="Output DT-1\n(2×3 Matrix)", width=1.0, height=0.8];
+        
+        // System 2 (1 input, 4 output states) - STACKED after DT-O1
+        subgraph cluster_system2 {
+            style=filled;
+            fillcolor="#F3E5F5";
+            color="#9C27B0";
+            label="System 2";
+            labelloc=bottom;
+            
+            s2_in1 [shape=circle, style=filled, fillcolor="#7B1FA2", fontcolor=white, label="1", width=0.3, height=0.3];
+            s2_dyn [shape=diamond, style=filled, fillcolor="#AB47BC", fontcolor=white, label="System Dynamics", width=0.6, height=0.4];
+            s2_out1 [shape=circle, style=filled, fillcolor="#7B1FA2", fontcolor=white, label="α", width=0.3, height=0.3];
+            s2_out2 [shape=circle, style=filled, fillcolor="#7B1FA2", fontcolor=white, label="β", width=0.3, height=0.3];
+            s2_out3 [shape=circle, style=filled, fillcolor="#7B1FA2", fontcolor=white, label="γ", width=0.3, height=0.3];
+            s2_out4 [shape=circle, style=filled, fillcolor="#7B1FA2", fontcolor=white, label="δ", width=0.3, height=0.3];
+        }
     }
     
-    // Right side outputs
-    subgraph cluster_right_outputs {
+    // MIDDLE-BOTTOM ROW: More systems and DTs
+    subgraph cluster_middle_bottom {
         style=invis;
         
-        // Projector (2 states)
-        subgraph cluster_projector {
+        // Input 5 (2 states)
+        subgraph cluster_input5 {
             style=filled;
-            fillcolor="#FFF3E0";
-            color="#FF9800";
-            label="Projector";
+            fillcolor="#E8F4FD";
+            color="#2196F3";
+            label="Input 5";
             labelloc=bottom;
             
-            p_state_1 [
-                shape=circle,
-                style=filled,
-                fillcolor="#F57C00",
-                fontcolor=white,
-                label="X",
-                width=0.4,
-                height=0.4
-            ];
-            
-            p_state_2 [
-                shape=circle,
-                style=filled,
-                fillcolor="#F57C00",
-                fontcolor=white,
-                label="Y",
-                width=0.4,
-                height=0.4
-            ];
+            i5_i [shape=circle, style=filled, fillcolor="#1976D2", fontcolor=white, label="I", width=0.3, height=0.3];
+            i5_j [shape=circle, style=filled, fillcolor="#1976D2", fontcolor=white, label="J", width=0.3, height=0.3];
         }
         
-        // Desktop Screen 1 (2 states)
-        subgraph cluster_desktop1 {
+        // Input-side DT 2
+        dt_i2 [shape=box, style=filled, fillcolor="#EEEEEE", label="Input DT-2\n(6×5 Matrix)", width=1.0, height=0.8];
+        
+        // System 3 (5 input, 1 output states)
+        subgraph cluster_system3 {
             style=filled;
-            fillcolor="#FFF3E0";
-            color="#FF9800";
-            label="Desktop Screen 1";
+            fillcolor="#F3E5F5";
+            color="#9C27B0";
+            label="System 3";
             labelloc=bottom;
             
-            d1_state_1 [
-                shape=circle,
-                style=filled,
-                fillcolor="#F57C00",
-                fontcolor=white,
-                label="U",
-                width=0.4,
-                height=0.4
-            ];
-            
-            d1_state_2 [
-                shape=circle,
-                style=filled,
-                fillcolor="#F57C00",
-                fontcolor=white,
-                label="V",
-                width=0.4,
-                height=0.4
-            ];
+            s3_in1 [shape=circle, style=filled, fillcolor="#7B1FA2", fontcolor=white, label="1", width=0.3, height=0.3];
+            s3_in2 [shape=circle, style=filled, fillcolor="#7B1FA2", fontcolor=white, label="2", width=0.3, height=0.3];
+            s3_in3 [shape=circle, style=filled, fillcolor="#7B1FA2", fontcolor=white, label="3", width=0.3, height=0.3];
+            s3_in4 [shape=circle, style=filled, fillcolor="#7B1FA2", fontcolor=white, label="4", width=0.3, height=0.3];
+            s3_in5 [shape=circle, style=filled, fillcolor="#7B1FA2", fontcolor=white, label="5", width=0.3, height=0.3];
+            s3_dyn [shape=diamond, style=filled, fillcolor="#AB47BC", fontcolor=white, label="System Dynamics", width=0.6, height=0.4];
+            s3_out1 [shape=circle, style=filled, fillcolor="#7B1FA2", fontcolor=white, label="α", width=0.3, height=0.3];
         }
         
-        // Desktop Screen 2 (2 states)
-        subgraph cluster_desktop2 {
+        // Output-side DT 2 
+        dt_o2 [shape=box, style=filled, fillcolor="#EEEEEE", label="Output DT-2\n(4×6 Matrix)", width=1.0, height=0.8];
+    }
+    
+    // BOTTOM ROW: Remaining inputs, systems, DTs
+    subgraph cluster_bottom {
+        style=invis;
+        
+        // Input 6 (2 states)
+        subgraph cluster_input6 {
             style=filled;
-            fillcolor="#FFF3E0";
-            color="#FF9800";
-            label="Desktop Screen 2";
+            fillcolor="#E8F4FD";
+            color="#2196F3";
+            label="Input 6";
             labelloc=bottom;
             
-            d2_state_1 [
-                shape=circle,
-                style=filled,
-                fillcolor="#F57C00",
-                fontcolor=white,
-                label="W",
-                width=0.4,
-                height=0.4
-            ];
-            
-            d2_state_2 [
-                shape=circle,
-                style=filled,
-                fillcolor="#F57C00",
-                fontcolor=white,
-                label="Z",
-                width=0.4,
-                height=0.4
-            ];
+            i6_k [shape=circle, style=filled, fillcolor="#1976D2", fontcolor=white, label="K", width=0.3, height=0.3];
+            i6_l [shape=circle, style=filled, fillcolor="#1976D2", fontcolor=white, label="L", width=0.3, height=0.3];
         }
         
-        // Desktop Screen 3 (1 state)
-        subgraph cluster_desktop3 {
+        // Input 7 (2 states)
+        subgraph cluster_input7 {
+            style=filled;
+            fillcolor="#E8F4FD";
+            color="#2196F3";
+            label="Input 7";
+            labelloc=bottom;
+            
+            i7_m [shape=circle, style=filled, fillcolor="#1976D2", fontcolor=white, label="M", width=0.3, height=0.3];
+            i7_n [shape=circle, style=filled, fillcolor="#1976D2", fontcolor=white, label="N", width=0.3, height=0.3];
+        }
+        
+        // Input-side DT 3
+        dt_i3 [shape=box, style=filled, fillcolor="#EEEEEE", label="Input DT-3\n(4×2 Matrix)", width=1.0, height=0.8];
+        
+        // System 4 (2 input, 6 output states)
+        subgraph cluster_system4 {
+            style=filled;
+            fillcolor="#F3E5F5";
+            color="#9C27B0";
+            label="System 4";
+            labelloc=bottom;
+            
+            s4_in1 [shape=circle, style=filled, fillcolor="#7B1FA2", fontcolor=white, label="1", width=0.3, height=0.3];
+            s4_in2 [shape=circle, style=filled, fillcolor="#7B1FA2", fontcolor=white, label="2", width=0.3, height=0.3];
+            s4_dyn [shape=diamond, style=filled, fillcolor="#AB47BC", fontcolor=white, label="System Dynamics", width=0.6, height=0.4];
+            s4_out1 [shape=circle, style=filled, fillcolor="#7B1FA2", fontcolor=white, label="α", width=0.3, height=0.3];
+            s4_out2 [shape=circle, style=filled, fillcolor="#7B1FA2", fontcolor=white, label="β", width=0.3, height=0.3];
+            s4_out3 [shape=circle, style=filled, fillcolor="#7B1FA2", fontcolor=white, label="γ", width=0.3, height=0.3];
+            s4_out4 [shape=circle, style=filled, fillcolor="#7B1FA2", fontcolor=white, label="δ", width=0.3, height=0.3];
+            s4_out5 [shape=circle, style=filled, fillcolor="#7B1FA2", fontcolor=white, label="ε", width=0.3, height=0.3];
+            s4_out6 [shape=circle, style=filled, fillcolor="#7B1FA2", fontcolor=white, label="ζ", width=0.3, height=0.3];
+        }
+        
+        // System 5 (4 input, 3 output states)
+        subgraph cluster_system5 {
+            style=filled;
+            fillcolor="#F3E5F5";
+            color="#9C27B0";
+            label="System 5";
+            labelloc=bottom;
+            
+            s5_in1 [shape=circle, style=filled, fillcolor="#7B1FA2", fontcolor=white, label="1", width=0.3, height=0.3];
+            s5_in2 [shape=circle, style=filled, fillcolor="#7B1FA2", fontcolor=white, label="2", width=0.3, height=0.3];
+            s5_in3 [shape=circle, style=filled, fillcolor="#7B1FA2", fontcolor=white, label="3", width=0.3, height=0.3];
+            s5_in4 [shape=circle, style=filled, fillcolor="#7B1FA2", fontcolor=white, label="4", width=0.3, height=0.3];
+            s5_dyn [shape=diamond, style=filled, fillcolor="#AB47BC", fontcolor=white, label="System Dynamics", width=0.6, height=0.4];
+            s5_out1 [shape=circle, style=filled, fillcolor="#7B1FA2", fontcolor=white, label="α", width=0.3, height=0.3];
+            s5_out2 [shape=circle, style=filled, fillcolor="#7B1FA2", fontcolor=white, label="β", width=0.3, height=0.3];
+            s5_out3 [shape=circle, style=filled, fillcolor="#7B1FA2", fontcolor=white, label="γ", width=0.3, height=0.3];
+        }
+        
+        // Input-side DT 4 (for feedback)
+        dt_i4 [shape=box, style=filled, fillcolor="#EEEEEE", label="Input DT-4\n(3×4 Matrix)", width=1.0, height=0.8];
+        
+        // Output-side DT 3
+        dt_o3 [shape=box, style=filled, fillcolor="#EEEEEE", label="Output DT-3\n(6×8 Matrix)", width=1.0, height=0.8];
+        
+        // Output-side DT 4 (for feedback)
+        dt_o4 [shape=box, style=filled, fillcolor="#EEEEEE", label="Output DT-4\n(3×3 Matrix)", width=1.0, height=0.8];
+    }
+    
+    // RIGHT SIDE: Outputs 1-10
+    subgraph cluster_outputs {
+        style=invis;
+        rank=sink;
+        
+        // Output 1 (2 states)
+        subgraph cluster_output1 {
             style=filled;
             fillcolor="#FFF3E0";
             color="#FF9800";
-            label="Desktop Screen 3";
+            label="Output 1";
             labelloc=bottom;
             
-            d3_state_1 [
-                shape=circle,
-                style=filled,
-                fillcolor="#F57C00",
-                fontcolor=white,
-                label="Q",
-                width=0.4,
-                height=0.4
-            ];
+            o1_x [shape=circle, style=filled, fillcolor="#F57C00", fontcolor=white, label="X", width=0.3, height=0.3];
+            o1_y [shape=circle, style=filled, fillcolor="#F57C00", fontcolor=white, label="Y", width=0.3, height=0.3];
+        }
+        
+        // Output 2 (3 states)
+        subgraph cluster_output2 {
+            style=filled;
+            fillcolor="#FFF3E0";
+            color="#FF9800";
+            label="Output 2";
+            labelloc=bottom;
+            
+            o2_p [shape=circle, style=filled, fillcolor="#F57C00", fontcolor=white, label="P", width=0.3, height=0.3];
+            o2_q [shape=circle, style=filled, fillcolor="#F57C00", fontcolor=white, label="Q", width=0.3, height=0.3];
+            o2_r [shape=circle, style=filled, fillcolor="#F57C00", fontcolor=white, label="R", width=0.3, height=0.3];
+        }
+        
+        // Output 3 (2 states)
+        subgraph cluster_output3 {
+            style=filled;
+            fillcolor="#FFF3E0";
+            color="#FF9800";
+            label="Output 3";
+            labelloc=bottom;
+            
+            o3_s [shape=circle, style=filled, fillcolor="#F57C00", fontcolor=white, label="S", width=0.3, height=0.3];
+            o3_t [shape=circle, style=filled, fillcolor="#F57C00", fontcolor=white, label="T", width=0.3, height=0.3];
+        }
+        
+        // Output 4 (4 states)
+        subgraph cluster_output4 {
+            style=filled;
+            fillcolor="#FFF3E0";
+            color="#FF9800";
+            label="Output 4";
+            labelloc=bottom;
+            
+            o4_u [shape=circle, style=filled, fillcolor="#F57C00", fontcolor=white, label="U", width=0.3, height=0.3];
+            o4_v [shape=circle, style=filled, fillcolor="#F57C00", fontcolor=white, label="V", width=0.3, height=0.3];
+            o4_w [shape=circle, style=filled, fillcolor="#F57C00", fontcolor=white, label="W", width=0.3, height=0.3];
+            o4_z [shape=circle, style=filled, fillcolor="#F57C00", fontcolor=white, label="Z", width=0.3, height=0.3];
+        }
+        
+        // Output 5 (2 states)
+        subgraph cluster_output5 {
+            style=filled;
+            fillcolor="#FFF3E0";
+            color="#FF9800";
+            label="Output 5";
+            labelloc=bottom;
+            
+            o5_a1 [shape=circle, style=filled, fillcolor="#F57C00", fontcolor=white, label="A1", width=0.3, height=0.3];
+            o5_b1 [shape=circle, style=filled, fillcolor="#F57C00", fontcolor=white, label="B1", width=0.3, height=0.3];
+        }
+        
+        // Output 6 (5 states)
+        subgraph cluster_output6 {
+            style=filled;
+            fillcolor="#FFF3E0";
+            color="#FF9800";
+            label="Output 6";
+            labelloc=bottom;
+            
+            o6_c1 [shape=circle, style=filled, fillcolor="#F57C00", fontcolor=white, label="C1", width=0.3, height=0.3];
+            o6_d1 [shape=circle, style=filled, fillcolor="#F57C00", fontcolor=white, label="D1", width=0.3, height=0.3];
+            o6_e1 [shape=circle, style=filled, fillcolor="#F57C00", fontcolor=white, label="E1", width=0.3, height=0.3];
+            o6_f1 [shape=circle, style=filled, fillcolor="#F57C00", fontcolor=white, label="F1", width=0.3, height=0.3];
+            o6_g1 [shape=circle, style=filled, fillcolor="#F57C00", fontcolor=white, label="G1", width=0.3, height=0.3];
+        }
+        
+        // Output 7 (3 states)
+        subgraph cluster_output7 {
+            style=filled;
+            fillcolor="#FFF3E0";
+            color="#FF9800";
+            label="Output 7";
+            labelloc=bottom;
+            
+            o7_h1 [shape=circle, style=filled, fillcolor="#F57C00", fontcolor=white, label="H1", width=0.3, height=0.3];
+            o7_i1 [shape=circle, style=filled, fillcolor="#F57C00", fontcolor=white, label="I1", width=0.3, height=0.3];
+            o7_j1 [shape=circle, style=filled, fillcolor="#F57C00", fontcolor=white, label="J1", width=0.3, height=0.3];
+        }
+        
+        // Output 8 (2 states)
+        subgraph cluster_output8 {
+            style=filled;
+            fillcolor="#FFF3E0";
+            color="#FF9800";
+            label="Output 8";
+            labelloc=bottom;
+            
+            o8_k1 [shape=circle, style=filled, fillcolor="#F57C00", fontcolor=white, label="K1", width=0.3, height=0.3];
+            o8_l1 [shape=circle, style=filled, fillcolor="#F57C00", fontcolor=white, label="L1", width=0.3, height=0.3];
+        }
+        
+        // Output 9 (4 states)
+        subgraph cluster_output9 {
+            style=filled;
+            fillcolor="#FFF3E0";
+            color="#FF9800";
+            label="Output 9";
+            labelloc=bottom;
+            
+            o9_m1 [shape=circle, style=filled, fillcolor="#F57C00", fontcolor=white, label="M1", width=0.3, height=0.3];
+            o9_n1 [shape=circle, style=filled, fillcolor="#F57C00", fontcolor=white, label="N1", width=0.3, height=0.3];
+            o9_o1 [shape=circle, style=filled, fillcolor="#F57C00", fontcolor=white, label="O1", width=0.3, height=0.3];
+            o9_p1 [shape=circle, style=filled, fillcolor="#F57C00", fontcolor=white, label="P1", width=0.3, height=0.3];
+        }
+        
+        // Output 10 (2 states)
+        subgraph cluster_output10 {
+            style=filled;
+            fillcolor="#FFF3E0";
+            color="#FF9800";
+            label="Output 10";
+            labelloc=bottom;
+            
+            o10_q1 [shape=circle, style=filled, fillcolor="#F57C00", fontcolor=white, label="Q1", width=0.3, height=0.3];
+            o10_r1 [shape=circle, style=filled, fillcolor="#F57C00", fontcolor=white, label="R1", width=0.3, height=0.3];
         }
     }
     
-
+    // SYSTEM INTERNAL CONNECTIONS
+    // System 1 internal
+    s1_in1 -> s1_dyn [color="#9C27B0"];
+    s1_in2 -> s1_dyn [color="#9C27B0"];
+    s1_in3 -> s1_dyn [color="#9C27B0"];
+    s1_dyn -> s1_out1 [color="#9C27B0"];
+    s1_dyn -> s1_out2 [color="#9C27B0"];
     
-    // Forward flow connections (restored missing arrows)
-    m1_state_1 -> dt_input [color="#666666", style=bold];
-    m1_state_2 -> dt_input [color="#666666", style=bold];
-    m2_state_1 -> dt_input [color="#666666", style=bold];
-    m2_state_2 -> dt_input [color="#666666", style=bold];
-    m2_state_3 -> dt_input [color="#666666", style=bold];
-    m3_state_1 -> dt_input [color="#666666", style=bold];
-    ext_state_1 -> dt_input [color="#666666", style=bold];
+    // System 2 internal
+    s2_in1 -> s2_dyn [color="#9C27B0"];
+    s2_dyn -> s2_out1 [color="#9C27B0"];
+    s2_dyn -> s2_out2 [color="#9C27B0"];
+    s2_dyn -> s2_out3 [color="#9C27B0"];
+    s2_dyn -> s2_out4 [color="#9C27B0"];
     
-    // NOTE: m1_state_3 (G) does NOT connect to input DT - feedback only
+    // System 3 internal
+    s3_in1 -> s3_dyn [color="#9C27B0"];
+    s3_in2 -> s3_dyn [color="#9C27B0"];
+    s3_in3 -> s3_dyn [color="#9C27B0"];
+    s3_in4 -> s3_dyn [color="#9C27B0"];
+    s3_in5 -> s3_dyn [color="#9C27B0"];
+    s3_dyn -> s3_out1 [color="#9C27B0"];
     
-    dt_input -> si_state_1 [color="#666666", style=bold];
-    dt_input -> si_state_2 [color="#666666", style=bold];
-    dt_input -> si_state_3 [color="#666666", style=bold];
+    // System 4 internal
+    s4_in1 -> s4_dyn [color="#9C27B0"];
+    s4_in2 -> s4_dyn [color="#9C27B0"];
+    s4_dyn -> s4_out1 [color="#9C27B0"];
+    s4_dyn -> s4_out2 [color="#9C27B0"];
+    s4_dyn -> s4_out3 [color="#9C27B0"];
+    s4_dyn -> s4_out4 [color="#9C27B0"];
+    s4_dyn -> s4_out5 [color="#9C27B0"];
+    s4_dyn -> s4_out6 [color="#9C27B0"];
     
-    so_state_1 -> dt_output [color="#666666", style=bold];
-    so_state_2 -> dt_output [color="#666666", style=bold];
-    so_state_3 -> dt_output [color="#666666", style=bold];
+    // System 5 internal
+    s5_in1 -> s5_dyn [color="#9C27B0"];
+    s5_in2 -> s5_dyn [color="#9C27B0"];
+    s5_in3 -> s5_dyn [color="#9C27B0"];
+    s5_in4 -> s5_dyn [color="#9C27B0"];
+    s5_dyn -> s5_out1 [color="#9C27B0"];
+    s5_dyn -> s5_out2 [color="#9C27B0"];
+    s5_dyn -> s5_out3 [color="#9C27B0"];
     
-    dt_output -> p_state_1 [color="#666666", style=bold];
-    dt_output -> p_state_2 [color="#666666", style=bold];
-    dt_output -> d1_state_1 [color="#666666", style=bold];
-    dt_output -> d1_state_2 [color="#666666", style=bold];
-    dt_output -> d2_state_1 [color="#666666", style=bold];
-    dt_output -> d2_state_2 [color="#666666", style=bold];
-    dt_output -> d3_state_1 [color="#666666", style=bold];
+    // MAIN FLOW CONNECTIONS
+    // Inputs to DT-I1
+    i1_a -> dt_i1 [color="#666666"];
+    i1_b -> dt_i1 [color="#666666"];
+    i2_c -> dt_i1 [color="#666666"];
+    i2_d -> dt_i1 [color="#666666"];
+    i3_e -> dt_i1 [color="#666666"];
+    i3_f -> dt_i1 [color="#666666"];
+    i4_g -> dt_i1 [color="#666666"];
+    i4_h -> dt_i1 [color="#666666"];
     
-    // Feedback connections (NO ARROWS - simple line connection)
-    // Cache bust: 2025-05-30-23:31 - NO DIRECTION LINE
-    dt_output -> dt_feedback [color="#E53935", style=bold, label="feedback", dir="none", arrowhead="none", arrowtail="none"];
+    // DT-I1 to System 1
+    dt_i1 -> s1_in1 [color="#666666"];
+    dt_i1 -> s1_in2 [color="#666666"];
+    dt_i1 -> s1_in3 [color="#666666"];
     
-    // Direct feedback to nearby states (much shorter paths)
-    dt_feedback -> m1_state_1 [color="#E53935", style=dashed]; // A
-    dt_feedback -> m2_state_1 [color="#E53935", style=dashed]; // C
-    dt_feedback -> m1_state_3 [color="#E53935", style=dashed]; // G (feedback-only)
+    // System 1 to DT-O1
+    s1_out1 -> dt_o1 [color="#666666"];
+    s1_out2 -> dt_o1 [color="#666666"];
+    
+    // STACKED SYSTEM: DT-O1 to System 2
+    dt_o1 -> s2_in1 [color="#666666"];
+    
+    // System 2 to DT-O2
+    s2_out1 -> dt_o2 [color="#666666"];
+    s2_out2 -> dt_o2 [color="#666666"];
+    s2_out3 -> dt_o2 [color="#666666"];
+    s2_out4 -> dt_o2 [color="#666666"];
+    
+    // Inputs to DT-I2
+    i5_i -> dt_i2 [color="#666666"];
+    i5_j -> dt_i2 [color="#666666"];
+    i6_k -> dt_i2 [color="#666666"];
+    i6_l -> dt_i2 [color="#666666"];
+    i7_m -> dt_i2 [color="#666666"];
+    i7_n -> dt_i2 [color="#666666"];
+    
+    // DT-I2 to System 3
+    dt_i2 -> s3_in1 [color="#666666"];
+    dt_i2 -> s3_in2 [color="#666666"];
+    dt_i2 -> s3_in3 [color="#666666"];
+    dt_i2 -> s3_in4 [color="#666666"];
+    dt_i2 -> s3_in5 [color="#666666"];
+    
+    // System 3 to DT-O3
+    s3_out1 -> dt_o3 [color="#666666"];
+    
+    // DT-I3 to System 4
+    dt_i3 -> s4_in1 [color="#666666"];
+    dt_i3 -> s4_in2 [color="#666666"];
+    
+    // System 4 to DT-O3
+    s4_out1 -> dt_o3 [color="#666666"];
+    s4_out2 -> dt_o3 [color="#666666"];
+    s4_out3 -> dt_o3 [color="#666666"];
+    s4_out4 -> dt_o3 [color="#666666"];
+    s4_out5 -> dt_o3 [color="#666666"];
+    s4_out6 -> dt_o3 [color="#666666"];
+    
+    // DT-I4 to System 5
+    dt_i4 -> s5_in1 [color="#666666"];
+    dt_i4 -> s5_in2 [color="#666666"];
+    dt_i4 -> s5_in3 [color="#666666"];
+    dt_i4 -> s5_in4 [color="#666666"];
+    
+    // System 5 to DT-O4
+    s5_out1 -> dt_o4 [color="#666666"];
+    s5_out2 -> dt_o4 [color="#666666"];
+    s5_out3 -> dt_o4 [color="#666666"];
+    
+    // DIRECT INPUT-OUTPUT CONNECTIONS (bypassing systems)
+    i3_e -> o1_x [color="#4CAF50", style=dashed]; // Direct connection
+    i4_g -> o3_s [color="#4CAF50", style=dashed]; // Direct connection
+    i7_n -> o5_a1 [color="#4CAF50", style=dashed]; // Direct connection
+    
+    // DT OUTPUTS TO FINAL OUTPUTS
+    dt_o1 -> o1_y [color="#666666"];
+    dt_o2 -> o2_p [color="#666666"];
+    dt_o2 -> o2_q [color="#666666"];
+    dt_o2 -> o2_r [color="#666666"];
+    dt_o2 -> o4_u [color="#666666"];
+    dt_o2 -> o4_v [color="#666666"];
+    dt_o2 -> o4_w [color="#666666"];
+    dt_o3 -> o6_c1 [color="#666666"];
+    dt_o3 -> o6_d1 [color="#666666"];
+    dt_o3 -> o6_e1 [color="#666666"];
+    dt_o3 -> o6_f1 [color="#666666"];
+    dt_o3 -> o6_g1 [color="#666666"];
+    dt_o3 -> o7_h1 [color="#666666"];
+    dt_o3 -> o7_i1 [color="#666666"];
+    dt_o3 -> o7_j1 [color="#666666"];
+    dt_o4 -> o8_k1 [color="#666666"];
+    dt_o4 -> o8_l1 [color="#666666"];
+    dt_o4 -> o9_m1 [color="#666666"];
+    dt_o4 -> o10_q1 [color="#666666"];
+    dt_o4 -> o10_r1 [color="#666666"];
+    
+    // Fill remaining outputs
+    s2_out4 -> o3_t [color="#666666"];
+    s4_out6 -> o4_z [color="#666666"];
+    s5_out3 -> o5_b1 [color="#666666"];
+    s3_out1 -> o9_n1 [color="#666666"];
+    s4_out3 -> o9_o1 [color="#666666"];
+    s5_out1 -> o9_p1 [color="#666666"];
+    
+    // FEEDBACK LOOPS
+    // Main feedback: DT-O4 -> DT-I4
+    dt_o4 -> dt_i4 [color="#E53935", style=bold, label="feedback", dir="none", arrowhead="none", arrowtail="none"];
+    
+    // System-to-system feedback: System 5 -> System 1
+    s5_out2 -> s1_in1 [color="#E53935", style=dashed, label="sys feedback"];
+    
+    // Cross-DT feedback: DT-O3 -> DT-I3
+    dt_o3 -> dt_i3 [color="#E53935", style=dotted, label="cross"];
 } 
