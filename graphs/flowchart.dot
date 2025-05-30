@@ -1,0 +1,15 @@
+digraph Flowchart {
+  node [shape=box];
+  
+  start [shape=ellipse, label="Start"];
+  decision [shape=diamond, label="Condition?"];
+  process1 [label="Process A"];
+  process2 [label="Process B"];
+  end [shape=ellipse, label="End"];
+  
+  start -> decision;
+  decision -> process1 [label="Yes"];
+  decision -> process2 [label="No"];
+  process1 -> end;
+  process2 -> end;
+} 

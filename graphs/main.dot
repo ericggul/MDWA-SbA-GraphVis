@@ -1,0 +1,68 @@
+digraph SystemArchitecture {
+  rankdir=TB;
+  node [shape=box, style=filled, fillcolor=lightblue];
+  edge [color=darkblue];
+
+  // Frontend Layer
+  subgraph cluster_frontend {
+    label="Frontend Layer";
+    style=filled;
+    fillcolor=lightgray;
+    
+    UI [label="User Interface\n(React/Vue)", fillcolor=lightgreen];
+    API_Gateway [label="API Gateway", fillcolor=lightgreen];
+  }
+
+  // Backend Layer
+  subgraph cluster_backend {
+    label="Backend Services";
+    style=filled;
+    fillcolor=lightyellow;
+    
+    Auth [label="Authentication\nService", fillcolor=orange];
+    UserMgmt [label="User Management\nService", fillcolor=orange];
+    DataProcessor [label="Data Processing\nService", fillcolor=orange];
+  }
+
+  // Database Layer
+  subgraph cluster_database {
+    label="Data Layer";
+    style=filled;
+    fillcolor=lightpink;
+    
+    MainDB [label="Main Database\n(PostgreSQL)", fillcolor=red, fontcolor=white];
+    Cache [label="Redis Cache", fillcolor=red, fontcolor=white];
+    FileStorage [label="File Storage\n(S3)", fillcolor=red, fontcolor=white];
+  }
+
+  // External Services
+  subgraph cluster_external {
+    label="External Services";
+    style=filled;
+    fillcolor=lightsteelblue;
+    
+    EmailService [label="Email Service", fillcolor=purple, fontcolor=white];
+    PaymentGW [label="Payment Gateway", fillcolor=purple, fontcolor=white];
+  }
+
+  // Connections
+  UI -> API_Gateway;
+  API_Gateway -> Auth;
+  API_Gateway -> UserMgmt;
+  API_Gateway -> DataProcessor;
+  
+  Auth -> MainDB;
+  UserMgmt -> MainDB;
+  UserMgmt -> Cache;
+  DataProcessor -> MainDB;
+  DataProcessor -> FileStorage;
+  
+  UserMgmt -> EmailService;
+  API_Gateway -> PaymentGW;
+
+  // Add some styling
+  UI [shape=ellipse];
+  MainDB [shape=cylinder];
+  Cache [shape=cylinder];
+  FileStorage [shape=folder];
+} 

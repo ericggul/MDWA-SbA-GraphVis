@@ -4,11 +4,56 @@
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>Graphviz Viewer</title>
+  <title>Graphviz Online</title>
   <style type="text/css" media="screen">
     body {
       overflow: hidden;
       margin: 0 0;
+    }
+
+    body.presentation #editor {
+      display: none;
+    }
+
+    body.presentation #options {
+      left: 0;
+    }
+
+    body.presentation #review {
+      left: 0;
+    }
+
+    #editor-toggle {
+      position: absolute;
+      left: 0;
+      top: 50%;
+      z-index: 10;
+      transform: translateY(-50%);
+    }
+
+    #toggle-btn {
+      cursor: pointer;
+      padding: 8px;
+      background: #eee;
+      border: 1px solid #ccc;
+      border-right: none;
+      border-radius: 4px 0 0 4px;
+    }
+
+    #editor {
+      margin: 0;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 50%;
+      left: 0;
+      transition: width 0.3s ease;
+      width: 50%;
+    }
+
+    #editor.collapsed {
+      width: 0;
+      overflow: hidden;
     }
 
     #review {
@@ -17,24 +62,34 @@
       top: 50px;
       bottom: 0;
       right: 0;
-      left: 0;
+      left: 50%;
       overflow: scroll;
+      transition: left 0.3s ease;
+    }
+
+    #review.expanded {
+      left: 0;
     }
 
     #options {
       margin: 0;
       position: fixed;
-      left: 0;
+      left: 50%;
       width: 100%;
       flex: 0 0 auto;
       background: #eee;
       border-bottom: 1px solid #ccc;
       padding: 8px;
       overflow: hidden;
+      transition: left 0.3s ease;
+    }
+
+    #options.expanded {
+      left: 0;
     }
 
     #options label {
-      margin-right: 16px;
+      margin-right: 8px;
     }
 
     #options #raw.disabled {
@@ -101,8 +156,6 @@
       background: red;
       color: white;
       z-index: 1;
-      padding: 10px;
-      border-radius: 4px;
     }
 
     #download {
@@ -116,23 +169,41 @@
       border-bottom: 1px solid #333333;
       border-left: 1px solid #CCCCCC;
     }
-
-    #file-info {
-      font-size: 14px;
-      color: #666;
-      margin-right: 16px;
-    }
-
-    .github-fork-ribbon-wrapper {
-      display: none;
-    }
   </style>
 </head>
 
 <body>
-  <div id="options">
-    <span id="file-info">Loading: graphs/main.dot</span>
+  <div id="editor-toggle">
+    <button id="toggle-btn">◀</button>
+  </div>
+  <pre id="editor">digraph G {
 
+  subgraph cluster_0 {
+    style=filled;
+    color=lightgrey;
+    node [style=filled,color=white];
+    a0 -> a1 -> a2 -> a3;
+    label = "process #1";
+  }
+
+  subgraph cluster_1 {
+    node [style=filled];
+    b0 -> b1 -> b2 -> b3;
+    label = "process #2";
+    color=blue
+  }
+  start -> a0;
+  start -> b0;
+  a1 -> b3;
+  b2 -> a3;
+  a3 -> a0;
+  a3 -> end;
+  b3 -> end;
+
+  start [shape=Mdiamond];
+  end [shape=Msquare];
+}</pre>
+  <div id="options">
     <label id="engine">
       Engine:
       <select>
@@ -173,25 +244,51 @@
       <input type="button" value="Share" id="share">
     </label>
 
-    <label>
-      <a href="interactive.html" style="margin-left: 16px; text-decoration: none; background: #007acc; color: white; padding: 4px 8px; border-radius: 3px;">Interactive Editor</a>
-    </label>
-
     <input type="input" value="" id="shareurl">
+
   </div>
-  
   <div id="review">
     <div id="error"></div>
   </div>
-  
   <div id="status"></div>
+  <div class="github-fork-ribbon-wrapper right">
+    <div class="github-fork-ribbon">
+      <a href="https://github.com/dreampuf/graphvizonline">Fork me on GitHub</a>
+    </div>
+  </div>
 
+  <script src="ace/ace.js" type="text/javascript" charset="utf-8"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.5.0/lz-string.min.js"
     integrity="sha512-qtX0GLM3qX8rxJN1gyDfcnMFFrKvixfoEOwbBib9VafR5vbChV5LeE5wSI/x+IlCkTY5ZFddFDCCfaVJJNnuKQ=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="viz-standalone.js"></script>
   <script src="svg-pan-zoom.min.js" type="text/javascript" charset="utf-8"></script>
   <script>
+    const editorElement = document.getElementById('editor');
+    const reviewElement = document.getElementById('review');
+    const optionsElement = document.getElementById('options');
+    const toggleBtn = document.getElementById('toggle-btn');
+
+    let isCollapsed = false;
+
+    toggleBtn.addEventListener('click', () => {
+      isCollapsed = !isCollapsed;
+
+      if (isCollapsed) {
+        editorElement.classList.add('collapsed');
+        reviewElement.classList.add('expanded');
+        optionsElement.classList.add('expanded');
+        toggleBtn.innerHTML = '▶';
+      } else {
+        editorElement.classList.remove('collapsed');
+        reviewElement.classList.remove('expanded');
+        optionsElement.classList.remove('expanded');
+        toggleBtn.innerHTML = '◀';
+      }
+
+      setTimeout(resizeSVG, 300);
+    });
+
     window.addEventListener('resize', resizeSVG);
 
     function resizeSVG() {
@@ -208,30 +305,32 @@
     }
 
     (function (document) {
+      //http://stackoverflow.com/a/10372280/398634
       window.URL = window.URL || window.webkitURL;
-      var el_status = document.getElementById("status"),
-        t_status = -1,
+      var el_stetus = document.getElementById("status"),
+        t_stetus = -1,
         reviewer = document.getElementById("review"),
         scale = window.devicePixelRatio || 1,
         downloadBtn = document.getElementById("download"),
+        editor = ace.edit("editor"),
+        lastHD = -1,
+        worker = null,
         parser = new DOMParser(),
+        showError = null,
         formatEl = document.querySelector("#format select"),
         engineEl = document.querySelector("#engine select"),
         rawEl = document.querySelector("#raw input"),
         shareEl = document.querySelector("#share"),
         shareURLEl = document.querySelector("#shareurl"),
-        errorEl = document.querySelector("#error"),
-        fileInfoEl = document.querySelector("#file-info");
-
-      let currentDotContent = '';
+        errorEl = document.querySelector("#error");
 
       function show_status(text, hide) {
         hide = hide || 0;
-        clearTimeout(t_status);
-        el_status.innerHTML = text;
+        clearTimeout(t_stetus);
+        el_stetus.innerHTML = text;
         if (hide) {
-          t_status = setTimeout(function () {
-            el_status.innerHTML = "";
+          t_stetus = setTimeout(function () {
+            el_stetus.innerHTML = "";
           }, hide);
         }
       }
@@ -277,14 +376,14 @@
       }
 
       function copyShareURL(e) {
-        let content = encodeURIComponent(currentDotContent);
+        let content = encodeURIComponent(editor.getSession().getDocument().getValue());
         const longUrl = new URL(location.href);
         longUrl.hash = content;
 
         shareEl.disabled = true;
         let n = 0;
         let animateId = setInterval(()=> { shareEl.value = "Loading" + ".".repeat(n++%3)}, 300)
-        
+        // cors for is.gd
         fetch("https://api.allorigins.win/get?url=" + encodeURIComponent("https://is.gd/create.php?" + new URLSearchParams({
           format: 'simple',
           url: longUrl.toString(),
@@ -310,14 +409,34 @@
           })
       }
 
+      function copyToClipboard(str) {
+        const el = document.createElement('textarea');
+        el.value = str;
+        el.setAttribute('readonly', '');
+        el.style.position = 'absolute';
+        el.style.left = '-9999px';
+        document.body.appendChild(el);
+        const selected =
+          document.getSelection().rangeCount > 0
+            ? document.getSelection().getRangeAt(0)
+            : false;
+        el.select();
+        var result = document.execCommand('copy')
+        document.body.removeChild(el);
+        if (selected) {
+          document.getSelection().removeAllRanges();
+          document.getSelection().addRange(selected);
+        }
+        return result;
+      };
+
       function renderGraph() {
-        if (!currentDotContent) return;
-        
         reviewer.classList.add("working");
         reviewer.classList.remove("error");
 
         show_status("rendering...");
         Viz.instance().then(function (viz) {
+          let dotContent = editor.getSession().getDocument().getValue();
           let options = {
             format: formatEl.value,
             engine: engineEl.value,
@@ -325,9 +444,9 @@
           let result = null;
 
           if (["svg", "png"].indexOf(formatEl.value) > -1) {
-            result = viz.renderSVGElement(currentDotContent, options);
+            result = viz.renderSVGElement(dotContent, options);
           } else {
-            result = viz.render(currentDotContent, options);
+            result = viz.render(dotContent, options);
           }
 
           if (result.status !== undefined && result.status != "success") {
@@ -341,6 +460,16 @@
           reviewer.classList.remove("working");
           show_status("done", 500)
         });
+      }
+
+      function updateState() {
+        const updatedUrl = new URL(window.location)
+        // Hash
+        const content = encodeURIComponent(editor.getSession().getDocument().getValue());
+        updatedUrl.hash = content
+        // Search params
+        updatedUrl.searchParams.set("engine", engineEl.value)
+        history.pushState({ "content": content, "engine": engineEl.value }, "", updatedUrl.toString())
       }
 
       function updateOutput(result) {
@@ -372,6 +501,8 @@
         if (formatEl.value == "svg" && !rawEl.checked) {
           var serializer = new XMLSerializer();
           var source = serializer.serializeToString(result);
+          // https://stackoverflow.com/questions/18925210/download-blob-content-using-specified-charset
+          //const blob = new Blob(["\ufeff", svg], {type: 'image/svg+xml;charset=utf-8'});
           const url = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(source);
           downloadBtn.href = url;
           downloadBtn.download = "graphviz.svg";
@@ -412,79 +543,97 @@
           text.appendChild(document.createTextNode(result));
           reviewer.appendChild(text);
         }
+
+        updateState()
       }
 
-      function loadDotFile(filePath) {
-        fileInfoEl.textContent = `Loading: ${filePath}`;
-        show_status("loading file...");
-        
-        fetch(filePath)
-          .then(res => {
-            if (!res.ok) {
-              throw new Error(`Failed to load ${filePath}: ${res.status} ${res.statusText}`);
-            }
-            return res.text();
-          })
-          .then(content => {
-            currentDotContent = content;
-            fileInfoEl.textContent = `File: ${filePath}`;
-            renderGraph();
-          })
-          .catch(err => {
-            show_error(err);
-            fileInfoEl.textContent = `Error loading: ${filePath}`;
-          });
-      }
+      editor.setTheme("ace/theme/twilight");
+      editor.getSession().setMode("ace/mode/dot");
+      editor.getSession().on("change", function () {
+        clearTimeout(lastHD);
+        lastHD = setTimeout(renderGraph, 1500);
+      });
+
+      window.onpopstate = function (event) {
+        if (event.state != null && event.state.content != undefined) {
+          editor.getSession().setValue(decodeURIComponent(event.state.content));
+        }
+      };
 
       formatEl.addEventListener("change", renderGraph);
       engineEl.addEventListener("change", renderGraph);
       rawEl.addEventListener("change", renderGraph);
-      shareEl.addEventListener("click", copyShareURL);
+      share.addEventListener("click", copyShareURL);
 
-      // Parse URL parameters
+      // Since apparently HTMLCollection does not implement the oh so convenient array functions
+      HTMLOptionsCollection.prototype.indexOf = function (name) {
+        for (let i = 0; i < this.length; i++) {
+          if (this[i].value == name) {
+            return i;
+          }
+        }
+
+        return -1;
+      };
+
+      /* parsing from URL sharing */
       const params = new URLSearchParams(location.search.substring(1));
-      
       if (params.has('engine')) {
         const engine = params.get('engine');
-        const engineOptions = engineEl.options;
-        for (let i = 0; i < engineOptions.length; i++) {
-          if (engineOptions[i].value == engine) {
-            engineEl.selectedIndex = i;
-            break;
-          }
+        const index = engineEl.options.indexOf(engine);
+        if (index > -1) { // if index exists
+          engineEl.selectedIndex = index;
+        } else {
+          show_error({ message: `invalid engine ${engine} selected` });
         }
       }
 
       if (params.has('format')) {
         const format = params.get('format');
-        const formatOptions = formatEl.options;
-        for (let i = 0; i < formatOptions.length; i++) {
-          if (formatOptions[i].value == format) {
-            formatEl.selectedIndex = i;
-            break;
-          }
+        const index = formatEl.options.indexOf(format);
+        if (index > -1) {
+          formatEl.selectedIndex = index;
+        } else {
+          show_error({ message: `Invalid format ${format} selected` });
         }
       }
 
-      // Check for content from URL or load default file
-      if (location.hash.length > 1) {
-        currentDotContent = decodeURIComponent(location.hash.substring(1));
-        fileInfoEl.textContent = "Content from URL";
+      if (params.has("presentation")) {
+        document.body.classList.add("presentation");
+      }
+
+      if (params.has('raw')) {
+        editor.getSession().setValue(params.get('raw'));
         renderGraph();
       } else if (params.has('compressed')) {
         const compressed = params.get('compressed');
-        currentDotContent = LZString.decompressFromEncodedURIComponent(compressed);
-        fileInfoEl.textContent = "Content from URL (compressed)";
+        editor.getSession().setValue(LZString.decompressFromEncodedURIComponent(compressed));
+      } else if (params.has('url')) {
+        const url = params.get('url');
+        let ok = false;
+        fetch(url)
+          .then(res => {
+            ok = res.ok;
+            return res.text();
+          })
+          .then(res => {
+            if (!ok) {
+              throw { message: res };
+            }
+
+            editor.getSession().setValue(res);
+            renderGraph();
+          }).catch(e => {
+            show_error(e);
+          });
+      } else if (location.hash.length > 1) {
+        editor.getSession().setValue(decodeURIComponent(location.hash.substring(1)));
+      } else if (editor.getValue()) { // Init
         renderGraph();
-      } else if (params.has('file')) {
-        loadDotFile(params.get('file'));
-      } else {
-        // Load default file
-        loadDotFile('graphs/main.dot');
       }
 
     })(document);
   </script>
 </body>
 
-</html> 
+</html>
