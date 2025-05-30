@@ -126,12 +126,33 @@
     .github-fork-ribbon-wrapper {
       display: none;
     }
+
+    /* Styling for the file selector */
+    #file-selector {
+      margin-right: 20px;
+      padding: 4px 8px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      background: white;
+      font-size: 14px;
+    }
   </style>
 </head>
 
 <body>
   <div id="options">
-    <span id="file-info">Loading: graphs/main.dot</span>
+    <label id="file-selection">
+      DOT File:
+      <select id="file-selector">
+        <option value="graphs/fig1.dot">Figure 1: Simple Interaction</option>
+        <option value="graphs/fig2.dot">Figure 2: State-Based Architecture</option>
+        <option value="graphs/main.dot">Main Graph</option>
+        <option value="graphs/flowchart.dot">Flowchart</option>
+        <option value="graphs/simple.dot">Simple</option>
+      </select>
+    </label>
+
+    <span id="file-info">Loading: graphs/fig1.dot</span>
 
     <label id="engine">
       Engine:
@@ -221,7 +242,8 @@
         shareEl = document.querySelector("#share"),
         shareURLEl = document.querySelector("#shareurl"),
         errorEl = document.querySelector("#error"),
-        fileInfoEl = document.querySelector("#file-info");
+        fileInfoEl = document.querySelector("#file-info"),
+        fileSelectorEl = document.querySelector("#file-selector");
 
       let currentDotContent = '';
 
@@ -436,10 +458,17 @@
           });
       }
 
+      // Event listeners
       formatEl.addEventListener("change", renderGraph);
       engineEl.addEventListener("change", renderGraph);
       rawEl.addEventListener("change", renderGraph);
       shareEl.addEventListener("click", copyShareURL);
+      
+      // File selector event listener
+      fileSelectorEl.addEventListener("change", function() {
+        const selectedFile = fileSelectorEl.value;
+        loadDotFile(selectedFile);
+      });
 
       // Parse URL parameters
       const params = new URLSearchParams(location.search.substring(1));
@@ -477,10 +506,13 @@
         fileInfoEl.textContent = "Content from URL (compressed)";
         renderGraph();
       } else if (params.has('file')) {
-        loadDotFile(params.get('file'));
+        const requestedFile = params.get('file');
+        fileSelectorEl.value = requestedFile;
+        loadDotFile(requestedFile);
       } else {
-        // Load default file
-        loadDotFile('graphs/main.dot');
+        // Load default file (Figure 1)
+        fileSelectorEl.value = 'graphs/fig1.dot';
+        loadDotFile('graphs/fig1.dot');
       }
 
     })(document);

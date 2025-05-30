@@ -1,0 +1,128 @@
+digraph Figure2_State_Based_Approach {
+    rankdir=LR;
+    
+    // Graph styling
+    graph [bgcolor=white, fontname="Arial", fontsize=12, splines=ortho];
+    node [fontname="Arial", fontsize=9];
+    edge [fontname="Arial", fontsize=8];
+    
+    // Subgraph for input section
+    subgraph cluster_input {
+        label="Input Layer";
+        style=filled;
+        fillcolor="#E8F4FD";
+        color="#2196F3";
+        
+        // Interactive input device
+        interactive_input [
+            shape=box,
+            width=1.0,
+            height=1.2,
+            style=filled,
+            fillcolor="#BBDEFB",
+            color="#2196F3",
+            label="Interactive\nInput"
+        ];
+        
+        // Input state
+        input_state [
+            shape=ellipse,
+            style=filled,
+            fillcolor="#1976D2",
+            fontcolor=white,
+            label="Interactive\nInput State"
+        ];
+        
+        interactive_input -> input_state [color="#2196F3"];
+    }
+    
+    // Subgraph for system section  
+    subgraph cluster_system {
+        label="System Core";
+        style=filled;
+        fillcolor="#F3E5F5";
+        color="#9C27B0";
+        
+        // System input state
+        system_input_state [
+            shape=ellipse,
+            style=filled,
+            fillcolor="#7B1FA2",
+            fontcolor=white,
+            label="System\nInput State"
+        ];
+        
+        // System dynamics (central)
+        system_dynamics [
+            shape=diamond,
+            width=1.5,
+            height=1.0,
+            style=filled,
+            fillcolor="#AB47BC",
+            fontcolor=white,
+            label="System\nDynamics"
+        ];
+        
+        // System output state
+        system_output_state [
+            shape=ellipse,
+            style=filled,
+            fillcolor="#7B1FA2", 
+            fontcolor=white,
+            label="System\nOutput State"
+        ];
+        
+        system_input_state -> system_dynamics [color="#9C27B0"];
+        system_dynamics -> system_output_state [color="#9C27B0"];
+        
+        // Self-loop for state transitions
+        system_dynamics -> system_dynamics [
+            label="State\nTransitions",
+            color="#9C27B0",
+            fontcolor="#9C27B0"
+        ];
+    }
+    
+    // Subgraph for output section
+    subgraph cluster_output {
+        label="Output Layer";
+        style=filled;
+        fillcolor="#FFF3E0";
+        color="#FF9800";
+        
+        // Visual output state
+        visual_output_state [
+            shape=ellipse,
+            style=filled,
+            fillcolor="#F57C00",
+            fontcolor=white,
+            label="Visual\nOutput State"
+        ];
+        
+        // Visual output device
+        visual_output [
+            shape=box,
+            width=1.5,
+            height=1.0,
+            style=filled,
+            fillcolor="#FFB74D",
+            color="#FF9800",
+            label="Visual\nOutput"
+        ];
+        
+        visual_output_state -> visual_output [color="#FF9800"];
+    }
+    
+    // Cross-cluster connections
+    input_state -> system_input_state [
+        label="Input\nTransformation",
+        color="#666666",
+        fontcolor="#666666"
+    ];
+    
+    system_output_state -> visual_output_state [
+        label="Output\nTransformation", 
+        color="#666666",
+        fontcolor="#666666"
+    ];
+} 

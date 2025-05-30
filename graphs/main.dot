@@ -9,7 +9,7 @@ digraph SystemArchitecture {
     style=filled;
     fillcolor=lightgray;
     
-    UI [label="User Interface\n(React/Vue)", fillcolor=lightgreen];
+    UI [label="User Interface", fillcolor=lightgreen];
     API_Gateway [label="API Gateway", fillcolor=lightgreen];
   }
 
@@ -30,9 +30,9 @@ digraph SystemArchitecture {
     style=filled;
     fillcolor=lightpink;
     
-    MainDB [label="Main Database\n(PostgreSQL)", fillcolor=red, fontcolor=white];
+    MainDB [label="Main Database", fillcolor=red, fontcolor=white];
     Cache [label="Redis Cache", fillcolor=red, fontcolor=white];
-    FileStorage [label="File Storage\n(S3)", fillcolor=red, fontcolor=white];
+    FileStorage [label="File Storage", fillcolor=red, fontcolor=white];
   }
 
   // External Services
