@@ -14,14 +14,17 @@ digraph Figure4_Multiple_States {
         label="Interactive Input\n(Multiple Input States)";
         labelloc=bottom;
         
+        // Invisible spacer to center the cluster
+        spacer_top [style=invis, height=0.5];
+        
         ii_state_1 [
             shape=circle,
             style=filled,
             fillcolor="#1976D2",
             fontcolor=white,
             label="A",
-            width=0.6,
-            height=0.6
+            width=0.5,
+            height=0.5
         ];
         
         ii_state_2 [
@@ -30,8 +33,8 @@ digraph Figure4_Multiple_States {
             fillcolor="#1976D2",
             fontcolor=white,
             label="B",
-            width=0.6,
-            height=0.6
+            width=0.5,
+            height=0.5
         ];
         
         ii_state_3 [
@@ -40,19 +43,22 @@ digraph Figure4_Multiple_States {
             fillcolor="#1976D2",
             fontcolor=white,
             label="C",
-            width=0.6,
-            height=0.6
+            width=0.5,
+            height=0.5
         ];
+        
+        // Invisible spacer to center the cluster
+        spacer_bottom [style=invis, height=0.5];
     }
     
-    // Input-Side Dimensional Transformation
+    // Input DT Box
     dt_input [
         shape=box,
         style=filled,
         fillcolor="#EEEEEE",
-        label="Input-Side\nDimensional\nTransformation\n(3×2 Matrix)",
-        width=1.2,
-        height=1.2
+        label="Input-Side\nDimensional\nTransformation\n(3×3 Matrix)",
+        width=1.0,
+        height=1.0
     ];
     
     // System Core box with System Input States, System Dynamics, and System Output States
@@ -69,8 +75,8 @@ digraph Figure4_Multiple_States {
             fillcolor="#7B1FA2",
             fontcolor=white,
             label="1",
-            width=0.6,
-            height=0.6
+            width=0.5,
+            height=0.5
         ];
         
         si_state_2 [
@@ -79,8 +85,18 @@ digraph Figure4_Multiple_States {
             fillcolor="#7B1FA2",
             fontcolor=white,
             label="2",
-            width=0.6,
-            height=0.6
+            width=0.5,
+            height=0.5
+        ];
+        
+        si_state_3 [
+            shape=circle,
+            style=filled,
+            fillcolor="#7B1FA2",
+            fontcolor=white,
+            label="3",
+            width=0.5,
+            height=0.5
         ];
         
         // Abstract System Dynamics representation
@@ -100,8 +116,8 @@ digraph Figure4_Multiple_States {
             fillcolor="#7B1FA2",
             fontcolor=white,
             label="α",
-            width=0.6,
-            height=0.6
+            width=0.5,
+            height=0.5
         ];
         
         so_state_2 [
@@ -110,8 +126,8 @@ digraph Figure4_Multiple_States {
             fillcolor="#7B1FA2",
             fontcolor=white,
             label="β",
-            width=0.6,
-            height=0.6
+            width=0.5,
+            height=0.5
         ];
         
         so_state_3 [
@@ -120,37 +136,27 @@ digraph Figure4_Multiple_States {
             fillcolor="#7B1FA2",
             fontcolor=white,
             label="γ",
-            width=0.6,
-            height=0.6
-        ];
-        
-        so_state_4 [
-            shape=circle,
-            style=filled,
-            fillcolor="#7B1FA2",
-            fontcolor=white,
-            label="δ",
-            width=0.6,
-            height=0.6
+            width=0.5,
+            height=0.5
         ];
         
         // System flow
         si_state_1 -> system_dynamics [color="#9C27B0"];
         si_state_2 -> system_dynamics [color="#9C27B0"];
+        si_state_3 -> system_dynamics [color="#9C27B0"];
         system_dynamics -> so_state_1 [color="#9C27B0"];
         system_dynamics -> so_state_2 [color="#9C27B0"];
         system_dynamics -> so_state_3 [color="#9C27B0"];
-        system_dynamics -> so_state_4 [color="#9C27B0"];
     }
     
-    // Output-Side Dimensional Transformation
+    // Output DT Box
     dt_output [
         shape=box,
         style=filled,
         fillcolor="#EEEEEE",
-        label="Output-Side\nDimensional\nTransformation\n(4×5 Matrix)",
-        width=1.2,
-        height=1.2
+        label="Output-Side\nDimensional\nTransformation\n(3×5 Matrix)",
+        width=1.0,
+        height=1.0
     ];
     
     // Visual Output box with multiple Visual Output States
@@ -161,14 +167,17 @@ digraph Figure4_Multiple_States {
         label="Visual Output\n(Multiple Output States)";
         labelloc=bottom;
         
+        // Invisible spacer to balance cluster height
+        vo_spacer_top [style=invis, height=0.3];
+        
         vo_state_1 [
             shape=circle,
             style=filled,
             fillcolor="#F57C00",
             fontcolor=white,
             label="X",
-            width=0.6,
-            height=0.6
+            width=0.5,
+            height=0.5
         ];
         
         vo_state_2 [
@@ -177,8 +186,8 @@ digraph Figure4_Multiple_States {
             fillcolor="#F57C00",
             fontcolor=white,
             label="Y",
-            width=0.6,
-            height=0.6
+            width=0.5,
+            height=0.5
         ];
         
         vo_state_3 [
@@ -187,8 +196,8 @@ digraph Figure4_Multiple_States {
             fillcolor="#F57C00",
             fontcolor=white,
             label="Z",
-            width=0.6,
-            height=0.6
+            width=0.5,
+            height=0.5
         ];
         
         vo_state_4 [
@@ -197,8 +206,8 @@ digraph Figure4_Multiple_States {
             fillcolor="#F57C00",
             fontcolor=white,
             label="W",
-            width=0.6,
-            height=0.6
+            width=0.5,
+            height=0.5
         ];
         
         vo_state_5 [
@@ -207,27 +216,30 @@ digraph Figure4_Multiple_States {
             fillcolor="#F57C00",
             fontcolor=white,
             label="V",
-            width=0.6,
-            height=0.6
+            width=0.5,
+            height=0.5
         ];
+        
+        // Invisible spacer to balance cluster height
+        vo_spacer_bottom [style=invis, height=0.3];
     }
     
-    // Connections
-    ii_state_1 -> dt_input [color="#666666", style=bold, arrowhead=none];
-    ii_state_2 -> dt_input [color="#666666", style=bold, arrowhead=none];
-    ii_state_3 -> dt_input [color="#666666", style=bold, arrowhead=none];
+    // Simple connections like fig2
+    ii_state_1 -> dt_input [color="#666666", style=bold];
+    ii_state_2 -> dt_input [color="#666666", style=bold];
+    ii_state_3 -> dt_input [color="#666666", style=bold];
     
     dt_input -> si_state_1 [color="#666666", style=bold];
     dt_input -> si_state_2 [color="#666666", style=bold];
+    dt_input -> si_state_3 [color="#666666", style=bold];
     
-    so_state_1 -> dt_output [color="#666666", style=bold, arrowhead=none];
-    so_state_2 -> dt_output [color="#666666", style=bold, arrowhead=none];
-    so_state_3 -> dt_output [color="#666666", style=bold, arrowhead=none];
-    so_state_4 -> dt_output [color="#666666", style=bold, arrowhead=none];
+    so_state_1 -> dt_output [color="#666666", style=bold];
+    so_state_2 -> dt_output [color="#666666", style=bold];
+    so_state_3 -> dt_output [color="#666666", style=bold];
     
     dt_output -> vo_state_1 [color="#666666", style=bold];
     dt_output -> vo_state_2 [color="#666666", style=bold];
     dt_output -> vo_state_3 [color="#666666", style=bold];
     dt_output -> vo_state_4 [color="#666666", style=bold];
     dt_output -> vo_state_5 [color="#666666", style=bold];
-} 
+}
