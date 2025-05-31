@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Batch Figure Download - MDWA Research</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .header {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .controls {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .figure-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .figure-card {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .figure-preview {
+            width: 100%;
+            height: 200px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fafafa;
+            overflow: hidden;
+        }
+        
+        .figure-preview img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        
+        .figure-preview.loading {
+            background: linear-gradient(45deg, #f0f0f0 25%, transparent 25%), 
+                        linear-gradient(-45deg, #f0f0f0 25%, transparent 25%), 
+                        linear-gradient(45deg, transparent 75%, #f0f0f0 75%), 
+                        linear-gradient(-45deg, transparent 75%, #f0f0f0 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+            animation: loading 1s linear infinite;
+        }
+        
+        @keyframes loading {
+            0% { background-position: 0 0, 0 10px, 10px -10px, -10px 0px; }
+            100% { background-position: 20px 20px, 20px 30px, 30px 10px, 10px 20px; }
+        }
+        
+        .figure-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .figure-description {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+        
+        .download-btn {
+            background: #007acc;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 0 5px;
+        }
+        
+        .download-btn:hover {
+            background: #005999;
+        }
+        
+        .download-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .batch-controls {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .batch-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 0 10px;
+            font-weight: bold;
+        }
+        
+        .batch-btn:hover {
+            background: #218838;
+        }
+        
+        .batch-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .progress {
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: #007acc;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .status {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 4px;
+            display: none;
+        }
+        
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-top: 10px;
+            color: #007acc;
+            text-decoration: none;
+        }
+        
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>MDWA Research - Figure Download Center</h1>
+        <p>Multi-Device Web Artwork: Interactive, Semantic, and Modular Systems Art</p>
+        <p><strong>Researcher:</strong> Jeanyoon Choi | <strong>Date:</strong> June 10, 2025</p>
+        <a href="index.html" class="back-link">← Back to Graphviz Viewer</a>
+    </div>
+    
+    <div class="controls">
+        <div class="batch-controls">
+            <button class="batch-btn" onclick="generateAllFigures()">Generate All Figures</button>
+            <button class="batch-btn" onclick="downloadAllFigures()">Download All as ZIP</button>
+        </div>
+        
+        <div class="progress" id="progress" style="display: none;">
+            <div>Generating figures...</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+            <div id="progress-text">0 / 8 figures generated</div>
+        </div>
+        
+        <div class="status" id="status"></div>
+    </div>
+    
+    <div class="figure-grid" id="figure-grid">
+        <!-- Figure cards will be populated by JavaScript -->
+    </div>
+
+    <script src="viz-standalone.js"></script>
+    <script>
+        const figures = [
+            {
+                file: 'graphs/fig1.dot',
+                name: 'fig1',
+                title: 'Figure 1: Simple Interaction',
+                description: 'Basic input-output model showing fundamental user interaction flow'
+            },
+            {
+                file: 'graphs/fig2.dot',
+                name: 'fig2',
+                title: 'Figure 2: State-Based Architecture',
+                description: 'SbA framework with four state types: Interactive Input, System Input, System Output, Visual Output'
+            },
+            {
+                file: 'graphs/fig3.dot',
+                name: 'fig3',
+                title: 'Figure 3: State-Based Architecture with Feedback',
+                description: 'Enhanced SbA with feedback mechanisms for dynamic system behavior'
+            },
+            {
+                file: 'graphs/fig4.dot',
+                name: 'fig4',
+                title: 'Figure 4: Dimensional Transformation',
+                description: 'DT integration showing transformation matrices between state layers'
+            },
+            {
+                file: 'graphs/fig5.dot',
+                name: 'fig5',
+                title: 'Figure 5: Multi-Device Architecture',
+                description: 'Complete multi-device setup with various input and output devices'
+            },
+            {
+                file: 'graphs/fig6.dot',
+                name: 'fig6',
+                title: 'Figure 6: Feedback Architecture',
+                description: 'Advanced feedback architecture with bidirectional information flow'
+            },
+            {
+                file: 'graphs/fig7.dot',
+                name: 'fig7',
+                title: 'Figure 7: Complex Multi-System Architecture',
+                description: 'Sophisticated multi-system architecture with 7 inputs, 10 outputs, and 5 systems'
+            },
+            {
+                file: 'graphs/fig8.dot',
+                name: 'fig8',
+                title: 'Figure 8: Economic DSGE System',
+                description: 'Dynamic Stochastic General Equilibrium economic system within MDWA framework'
+            }
+        ];
+
+        let generatedImages = {};
+        let vizInstance = null;
+
+        // Initialize Viz.js
+        Viz.instance().then(function(viz) {
+            vizInstance = viz;
+            createFigureCards();
+        }).catch(function(err) {
+            showStatus('Error initializing Graphviz engine: ' + err.message, 'error');
+        });
+
+        function createFigureCards() {
+            const grid = document.getElementById('figure-grid');
+            
+            figures.forEach(figure => {
+                const card = document.createElement('div');
+                card.className = 'figure-card';
+                card.innerHTML = `
+                    <div class="figure-preview loading" id="preview-${figure.name}">
+                        <span>Loading...</span>
+                    </div>
+                    <div class="figure-title">${figure.title}</div>
+                    <div class="figure-description">${figure.description}</div>
+                    <button class="download-btn" onclick="downloadFigure('${figure.name}')" disabled>
+                        Download PNG
+                    </button>
+                    <button class="download-btn" onclick="generateSingleFigure('${figure.name}')" id="gen-${figure.name}">
+                        Generate
+                    </button>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        async function loadDotFile(filePath) {
+            try {
+                const response = await fetch(filePath);
+                if (!response.ok) {
+                    throw new Error(`Failed to load ${filePath}: ${response.status}`);
+                }
+                return await response.text();
+            } catch (err) {
+                throw new Error(`Error loading ${filePath}: ${err.message}`);
+            }
+        }
+
+        async function generateSingleFigure(figureName) {
+            const figure = figures.find(f => f.name === figureName);
+            if (!figure) return;
+
+            const genBtn = document.getElementById(`gen-${figureName}`);
+            const preview = document.getElementById(`preview-${figureName}`);
+            
+            genBtn.disabled = true;
+            genBtn.textContent = 'Generating...';
+            preview.className = 'figure-preview loading';
+            preview.innerHTML = '<span>Generating...</span>';
+
+            try {
+                const dotContent = await loadDotFile(figure.file);
+                const svgElement = vizInstance.renderSVGElement(dotContent, {
+                    format: 'svg',
+                    engine: 'dot'
+                });
+
+                // Convert SVG to PNG
+                const pngDataUrl = await svgToPng(svgElement);
+                generatedImages[figureName] = pngDataUrl;
+
+                // Update preview
+                preview.className = 'figure-preview';
+                preview.innerHTML = `<img src="${pngDataUrl}" alt="${figure.title}">`;
+
+                // Enable download button
+                const downloadBtn = preview.parentElement.querySelector('.download-btn');
+                downloadBtn.disabled = false;
+
+                genBtn.textContent = 'Regenerate';
+                genBtn.disabled = false;
+
+            } catch (err) {
+                preview.className = 'figure-preview';
+                preview.innerHTML = `<span style="color: red;">Error: ${err.message}</span>`;
+                genBtn.textContent = 'Retry';
+                genBtn.disabled = false;
+            }
+        }
+
+        async function generateAllFigures() {
+            const progressEl = document.getElementById('progress');
+            const progressFill = document.getElementById('progress-fill');
+            const progressText = document.getElementById('progress-text');
+            
+            progressEl.style.display = 'block';
+            
+            let completed = 0;
+            const total = figures.length;
+
+            for (const figure of figures) {
+                try {
+                    await generateSingleFigure(figure.name);
+                    completed++;
+                } catch (err) {
+                    console.error(`Failed to generate ${figure.name}:`, err);
+                    completed++;
+                }
+
+                const percentage = (completed / total) * 100;
+                progressFill.style.width = percentage + '%';
+                progressText.textContent = `${completed} / ${total} figures generated`;
+            }
+
+            progressEl.style.display = 'none';
+            showStatus('All figures generated successfully!', 'success');
+        }
+
+        function downloadFigure(figureName) {
+            const imageData = generatedImages[figureName];
+            if (!imageData) {
+                showStatus('Figure not generated yet. Please generate it first.', 'error');
+                return;
+            }
+
+            const link = document.createElement('a');
+            link.download = `${figureName}.png`;
+            link.href = imageData;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        async function downloadAllFigures() {
+            if (Object.keys(generatedImages).length === 0) {
+                showStatus('No figures generated yet. Please generate figures first.', 'error');
+                return;
+            }
+
+            // Create a simple ZIP-like download by creating multiple downloads
+            let delay = 0;
+            Object.keys(generatedImages).forEach(figureName => {
+                setTimeout(() => {
+                    downloadFigure(figureName);
+                }, delay);
+                delay += 500; // Stagger downloads by 500ms
+            });
+
+            showStatus(`Downloading ${Object.keys(generatedImages).length} figures...`, 'success');
+        }
+
+        function svgToPng(svgElement) {
+            return new Promise((resolve, reject) => {
+                const serializer = new XMLSerializer();
+                const source = serializer.serializeToString(svgElement);
+                const img = new Image();
+                
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    
+                    canvas.width = img.width * 2; // 2x scale for better quality
+                    canvas.height = img.height * 2;
+                    
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    resolve(canvas.toDataURL('image/png'));
+                };
+                
+                img.onerror = function(err) {
+                    reject(new Error('Failed to convert SVG to PNG'));
+                };
+                
+                const dataUrl = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(source)));
+                img.src = dataUrl;
+            });
+        }
+
+        function showStatus(message, type) {
+            const statusEl = document.getElementById('status');
+            statusEl.textContent = message;
+            statusEl.className = `status ${type}`;
+            statusEl.style.display = 'block';
+            
+            setTimeout(() => {
+                statusEl.style.display = 'none';
+            }, 5000);
+        }
+    </script>
+</body>
+</html> 

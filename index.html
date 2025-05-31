@@ -179,12 +179,12 @@
     <label id="format">
       Format:
       <select>
-        <option selected="">svg</option>
-        <option>png</option>
-        <option>json</option>
-        <option>xdot</option>
-        <option>plain</option>
-        <option>ps</option>
+        <option value="svg" selected>svg</option>
+        <option value="png">png</option>
+        <option value="json">json</option>
+        <option value="xdot">xdot</option>
+        <option value="plain">plain</option>
+        <option value="ps">ps</option>
       </select>
     </label>
 
@@ -202,6 +202,10 @@
 
     <label>
       <a href="interactive.html" style="margin-left: 16px; text-decoration: none; background: #007acc; color: white; padding: 4px 8px; border-radius: 3px;">Interactive Editor</a>
+    </label>
+
+    <label>
+      <a href="download.html" style="margin-left: 8px; text-decoration: none; background: #28a745; color: white; padding: 4px 8px; border-radius: 3px;">Batch Download</a>
     </label>
 
     <input type="input" value="" id="shareurl">
@@ -397,12 +401,16 @@
         reviewer.classList.remove("working");
         reviewer.classList.remove("error");
 
+        // Extract filename from selected file
+        const selectedFile = fileSelectorEl.value;
+        const fileName = selectedFile.split('/').pop().replace('.dot', '');
+
         if (formatEl.value == "svg" && !rawEl.checked) {
           var serializer = new XMLSerializer();
           var source = serializer.serializeToString(result);
           const url = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(source);
           downloadBtn.href = url;
-          downloadBtn.download = "graphviz.svg";
+          downloadBtn.download = fileName + ".svg";
           var a = document.createElement("a");
           a.appendChild(result);
           reviewer.appendChild(a);
@@ -423,7 +431,7 @@
             }
             image.setAttribute("title", "graphviz");
             downloadBtn.href = image.src;
-            downloadBtn.download = "graphviz.png";
+            downloadBtn.download = fileName + ".png";
             var a = document.createElement("a");
             a.appendChild(image);
             reviewer.appendChild(a);

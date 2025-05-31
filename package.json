@@ -1,0 +1,34 @@
+{
+    "name": "mdwa-graph-visualization",
+    "version": "1.0.0",
+    "description": "MDWA PhD Research Repository - Graph Visualization Tools",
+    "main": "generate-figures.js",
+    "scripts": {
+        "install-deps": "npm install",
+        "generate": "node generate-figures.js",
+        "serve": "python -m http.server 8000",
+        "serve-alt": "python3 -m http.server 8000",
+        "generate-all": "npm run serve & sleep 3 && npm run generate"
+    },
+    "dependencies": {
+        "puppeteer": "^21.6.1"
+    },
+    "devDependencies": {},
+    "keywords": [
+        "mdwa",
+        "graphviz",
+        "visualization",
+        "research",
+        "phd",
+        "systems-art"
+    ],
+    "author": "Jeanyoon Choi",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "MDWA-SbA-GraphVis"
+    },
+    "engines": {
+        "node": ">=16.0.0"
+    }
+}

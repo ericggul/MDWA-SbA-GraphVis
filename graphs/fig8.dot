@@ -279,11 +279,11 @@ digraph Figure8_Economic_MDWA_System {
     
     // ===== FEEDBACK LOOPS =====
     
-    // Expectation feedback (key DSGE feature)
-    sys_inflation -> sys_expectations [color="#E53935", style=dashed, label="expectations"];
-    sys_gdp -> sys_market_sentiment [color="#E53935", style=dashed, label="feedback"];
+    // Expectation feedback (key DSGE feature) - expectations drive inflation
+    sys_expectations -> sys_inflation [color="#E53935", style=dashed, label="expectations"];
+    sys_market_sentiment -> sys_gdp [color="#E53935", style=dashed, label="sentiment feedback"];
     
-    // Policy feedback
-    sys_fiscal_balance -> sys_fiscal_shock [color="#E53935", style=dotted, label="debt dynamics"];
-    sys_interest -> sys_monetary_shock [color="#E53935", style=dotted, label="rate transmission"];
+    // Policy feedback - shocks drive outcomes, outcomes inform future shocks
+    sys_fiscal_shock -> sys_fiscal_balance [color="#E53935", style=dotted, label="fiscal impact"];
+    sys_monetary_shock -> sys_interest [color="#E53935", style=dotted, label="monetary transmission"];
 } 
